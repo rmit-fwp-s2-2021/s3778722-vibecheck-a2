@@ -30,7 +30,7 @@ const Profile = (props) => {
                 <div className="card border-0 card-p col-sm-4 bg-profile user-profile">
                   <div className="card-body text-center text-white">
                     <div className="mb-4">
-                      {props.user.imgUrl !== null ? (
+                      {props.user.imgUrl ? (
                         <img
                           src={props.user.imgUrl}
                           className="img-radius"
@@ -44,11 +44,7 @@ const Profile = (props) => {
                         />
                       )}
                     </div>
-                    <ImageUpload
-                      currentEmail={props.email}
-                      user={props.user}
-                      setUserData={props.setUserData}
-                    />
+                    <ImageUpload {...props} />
                     <hr />
                     <h6 className="fw-bold mb-3">{props.user.name}</h6>
                     <p>{props.user.email}</p>

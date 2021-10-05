@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { editUser, setUser } from "../data/repository";
+import { editUser } from "../data/repository";
 
 const PopupForm = (props) => {
   //useState hook for showing the modal popup
@@ -22,6 +22,7 @@ const PopupForm = (props) => {
     email: props.user.email,
     password: props.user.password_hash,
     date: props.user.date,
+    imgUrl: props.user.imgUrl,
   });
 
   //useState hook for the alert message
@@ -52,12 +53,10 @@ const PopupForm = (props) => {
   const passwordRegex = new RegExp(
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[-!@#$%^&*()_+|~=`{}[\]:";'<>?,./]).{6,}$/
   );
-
   const trimFields = () => {
     const trimmedFields = {};
     Object.keys(fields).map((key) => (trimmedFields[key] = fields[key].trim()));
     setFields(trimmedFields);
-
     return trimmedFields;
   };
 

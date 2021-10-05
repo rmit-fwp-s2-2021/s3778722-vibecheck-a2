@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import S3 from "react-aws-s3";
+import { editUser } from "../data/repository";
 
 //AWS S3 config data
 const S3_BUCKET = "vibe-check-bucket";
@@ -20,7 +21,7 @@ const ReactS3Client = new S3(config);
 
 const ImageUpload = (props) => {
   //retrieve the local storage 'users'
-  let users = JSON.parse(localStorage.getItem("users"));
+  //let users = JSON.parse(localStorage.getItem("users"));
 
   //useState hook for file selection
   const [fileSelected, setFileSelected] = useState(null);
@@ -36,14 +37,15 @@ const ImageUpload = (props) => {
   //event handler for file upload
   const handleUpload = async (file) => {
     //if users is null set to empty array
+    /*
     if (users === null) {
       users = [];
     }
-
+    */
     setAlertMessage("Uploading...");
 
     //execute s3 file upload with new filename set as current user email
-    await ReactS3Client.uploadFile(file, props.currentEmail)
+    await ReactS3Client.uploadFile(file, props.user.email)
       .then((data) => {
         console.log(data);
         alert("Upload complete");
@@ -55,19 +57,21 @@ const ImageUpload = (props) => {
     document.getElementById("fileUpload").value = "";
 
     //loop through the users and add a new imgUrl field for the new aws s3 hosting url
-    for (const i of users.keys()) {
-      if (users[i].email === props.currentEmail) {
-        users[i].imgUrl =
-          "https://vibe-check-bucket.s3-us-east-2.amazonaws.com/" +
-          props.currentEmail;
-      }
-    }
+    let user = {};
+    Object.keys(props.user).map((key) => (user[key] = props.user[key]));
+
+    user["imgUrl"] =
+      "https://vibe-check-bucket.s3-us-east-2.amazonaws.com/" + user.email;
+
+    const userJSON = JSON.stringify(user);
+    const newUser = await editUser(user);
+    props.setUser(newUser);
 
     //set the newly assigned users to local storage
-    localStorage.setItem("users", JSON.stringify(users));
+    //localStorage.setItem("users", JSON.stringify(users));
 
     //set the users data
-    props.setUserData(users);
+    //props.setUserData(users);
   };
 
   //function to show alert message with the message parameter

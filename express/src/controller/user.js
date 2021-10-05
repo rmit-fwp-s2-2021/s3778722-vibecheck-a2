@@ -46,14 +46,23 @@ exports.create = async (req, res) => {
 // Update a profile in the database.
 exports.update = async (req, res) => {
   const user = await db.user.findByPk(req.body.email);
-  const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
+  if (req.body.password) {
+    const hash = await argon2.hash(req.body.password, {
+      type: argon2.argon2id,
+    });
+    if (req.body.password !== user.password_hash) {
+      user.password_hash = hash;
+    }
+  }
+
+  if (req.body.password_hash) {
+    user.password_hash = req.body.password_hash;
+  }
 
   user.email = req.body.email;
-  if (req.body.password !== user.password_hash) {
-    user.password_hash = hash;
-  }
   user.name = req.body.name;
   user.date = req.body.date;
+  user.imgUrl = req.body.imgUrl;
 
   await user.save();
 

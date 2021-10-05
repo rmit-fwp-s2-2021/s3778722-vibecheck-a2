@@ -14,15 +14,15 @@ const Home = (props) => {
                 <div className="card border-0 card-p col-sm-4 bg-profile-2 user-profile">
                   <div className="card-body text-center text-white">
                     <div className="mb-4">
-                      {props.user.imgUrl === null ? (
+                      {props.user.imgUrl ? (
                         <img
-                          src={defaultUser}
+                          src={props.user.imgUrl}
                           className="img-radius"
                           alt="User-Profile"
                         />
                       ) : (
                         <img
-                          src={props.user.imgUrl}
+                          src={defaultUser}
                           className="img-radius"
                           alt="User-Profile"
                         />

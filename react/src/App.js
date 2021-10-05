@@ -34,8 +34,7 @@ function App() {
   //useState hook for currentUser, which uses email as unique identifier that retrieve from local storage of 'currentUser' key.
   const [email, setEmail] = useState(localStorage.getItem("currentUser"));
 
-  const [user, setUser] = useState(getUser);
-  //console.log(user);
+  const [user, setUser] = useState(getUser());
 
   useEffect(() => {
     async function loadProfile() {
