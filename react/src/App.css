@@ -1,0 +1,206 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
+
+body,
+html {
+  height: 100%;
+}
+
+.bg {
+  /* The image used */
+  background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.App {
+  text-align: center;
+}
+
+.img-radius {
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.card {
+  min-height: 60vh;
+}
+
+.card-p {
+  min-height: 20vh;
+}
+
+.card1 {
+  width: 60%;
+  padding: 20px;
+}
+
+.card2 {
+  width: 40%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-image: url("assets/Login-bg6.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.card2-reg {
+  width: 40%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-image: url("assets/Login-bg5.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: -230px;
+}
+
+@media screen and (max-width: 992px) {
+  .card1 {
+    width: 100%;
+    padding: 40px 30px 10px 30px;
+  }
+
+  .card2 {
+    width: 100%;
+  }
+
+  .card2-reg {
+    width: 100%;
+  }
+
+  .right {
+    margin-top: 100px !important;
+    margin-bottom: 100px !important;
+  }
+}
+
+.title-special {
+  font-family: MADE-Soulmaze;
+}
+
+.title-special-2 {
+  font-family: MADE-Soulmaze-ori;
+}
+
+.title-headings {
+  font-family: "Montserrat", sans-serif;
+}
+
+.btn-blue-left {
+  background-color: #42daf5 !important;
+  color: white !important;
+}
+
+.btn-blue-left:hover {
+  background-image: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 67%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  border-right-style: none !important;
+  color: white !important;
+}
+.btn-blue-right {
+  background-color: #42daf5 !important;
+  color: white !important;
+}
+
+.btn-blue-right:hover {
+  background-image: linear-gradient(
+    270deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 67%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  border-left-style: none !important;
+  color: white !important;
+}
+
+.bg-profile {
+  background: #00c6ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to left,
+    #0072ff,
+    #00c6ff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to left,
+    #0072ff,
+    #00c6ff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.bg-profile-2 {
+  background: #1488cc; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #2b32b2,
+    #1488cc
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #2b32b2,
+    #1488cc
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.card-profile {
+  border-radius: 30px;
+  -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+  box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+  border: none;
+  margin-bottom: 0px;
+  overflow: hidden;
+}
+
+.user-profile {
+  padding: 20px 0;
+}
+
+.wrapper {
+  min-height: calc(100vh - 40px);
+  padding: 2rem !important;
+}
