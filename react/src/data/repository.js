@@ -60,6 +60,11 @@ async function createPost(post) {
   return response.data;
 }
 
+async function editPost(post) {
+  const response = await axios.put(API_HOST + "/api/posts/edit", post);
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -85,4 +90,5 @@ export {
   setUser,
   deleteUser,
   getUsers,
+  editPost,
 };

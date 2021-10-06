@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import defaultUser from "../assets/user.svg";
 import S3 from "react-aws-s3";
-import { createPost, getPosts } from "../data/repository";
+import { createPost, getPosts, editPost } from "../data/repository";
 
 //s3 config data
 const S3_BUCKET = "vibe-check-bucket";
@@ -82,9 +82,9 @@ const Posts = (props) => {
     props.setComments(commentsData);
     setComment("");
   };
-
+  console.log(editId);
   //event handler for editing a post
-  const handleEdit = (event) => {
+  const handleEdit = async (event) => {
     event.preventDefault();
     const postTrimmed = postEdit.trim();
     //make sure the field is not empty
@@ -94,22 +94,25 @@ const Posts = (props) => {
     }
 
     //assign the post data
-    let tmpPost = [...props.posts];
-
+    let tmpPost = {};
     //loop through the post data and assign the new post input
-    props.posts.forEach((postTmp, index) => {
-      if (postTmp.postID === editId) {
-        tmpPost[index].postID = postTmp.postID;
-        tmpPost[index].email = postTmp.email;
-        tmpPost[index].name = postTmp.name;
-        tmpPost[index].text = postEdit;
-        tmpPost[index].date = postTmp.date;
-        tmpPost[index].dateData = postTmp.dateData;
+    props.posts.forEach((postTmp) => {
+      console.log(postTmp.post_id);
+      if (postTmp.post_id === parseInt(editId)) {
+        console.log("runnnnnnnn");
+        console.log(tmpPost);
+        tmpPost["post_id"] = postTmp.post_id;
+        tmpPost["text"] = postTrimmed;
+        tmpPost["imgUrl"] = postTmp.imgUrl;
+        tmpPost["date"] = postTmp.date;
+        tmpPost["dateData"] = postTmp.dateData;
       }
     });
+    const editedPost = await editPost(tmpPost);
+    props.setPosts([...props.posts, editedPost]);
     //set the new post data in local storage in json format
-    props.setPosts(tmpPost);
-    localStorage.setItem("posts", JSON.stringify(tmpPost));
+    //props.setPosts(tmpPost);
+    //localStorage.setItem("posts", JSON.stringify(tmpPost));
 
     //reset the states
     setPostEdit("");
@@ -399,7 +402,7 @@ const Posts = (props) => {
                       className="btn btn-outline-danger m-1"
                       data-bs-toggle="modal"
                       data-bs-target="#exampleModal"
-                      value={x.postID}
+                      value={x.post_id}
                       onClick={handleEditID}
                     >
                       Edit
@@ -407,7 +410,7 @@ const Posts = (props) => {
                     <button
                       type="button"
                       className="btn btn-danger"
-                      value={x.postID}
+                      value={x.post_iD}
                       onClick={handleDelete}
                     >
                       Delete

@@ -23,3 +23,19 @@ exports.create = async (req, res) => {
 
   res.json(post);
 };
+
+// Update a profile in the database.
+exports.update = async (req, res) => {
+  const post = await db.post.findByPk(req.body.post_id);
+
+  post.post_id = req.body.post_id;
+  post.text = req.body.text;
+  post.userEmail = req.body.userEmail;
+  post.imgUrl = req.body.imgUrl;
+  post.date = req.body.date;
+  post.dateData = req.body.dateData;
+
+  await post.save();
+
+  res.json(post);
+};
