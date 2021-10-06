@@ -5,6 +5,12 @@ const API_HOST = "http://localhost:4000";
 const USER_KEY = "user";
 
 // --- User ---------------------------------------------------------------------------------------
+
+async function getUsers() {
+  const response = await axios.get(API_HOST + `/api/users/`);
+  return response.data;
+}
+
 async function verifyUser(email, password) {
   const response = await axios.get(API_HOST + "/api/users/login", {
     params: { email, password },
@@ -78,4 +84,5 @@ export {
   removeUser,
   setUser,
   deleteUser,
+  getUsers,
 };

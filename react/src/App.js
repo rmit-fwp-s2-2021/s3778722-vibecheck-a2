@@ -17,7 +17,13 @@ import Posts from "./components/Posts";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import wallpaper from "./assets/Landing.jpg";
-import { getUser, removeUser, findUser } from "./data/repository";
+import {
+  getUser,
+  removeUser,
+  findUser,
+  getPosts,
+  getUsers,
+} from "./data/repository";
 
 //Styled-Components
 const Wrapper = styled.section`
@@ -35,6 +41,10 @@ function App() {
   const [email, setEmail] = useState(localStorage.getItem("currentUser"));
 
   const [user, setUser] = useState(getUser());
+  //const [users, setUsers] = useState([]);
+
+  const [posts, setPosts] = useState([]);
+  //const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadProfile() {
@@ -45,10 +55,31 @@ function App() {
     loadProfile();
   }, [email]);
 
+  useEffect(() => {
+    async function loadPosts() {
+      const currentPosts = await getPosts();
+      setPosts(currentPosts);
+      //setIsLoading(false);
+    }
+    loadPosts();
+  }, [posts.length]);
+
+  /*
+  useEffect(() => {
+    async function loadUsers() {
+      const currentUsers = await getUsers();
+
+      setUsers(currentUsers);
+    }
+    loadUsers();
+    console.log("run user effect");
+  }, []);
+  */
   //useState hook for posts that retrieve from local storage of 'posts' key.
+  /*
   const [posts, setPosts] = useState(
     JSON.parse(localStorage.getItem("posts")) || []
-  );
+  );*/
 
   //useState hook for comments that retrieve from local storage of 'comments' key.
   const [comments, setComments] = useState(
@@ -152,13 +183,14 @@ function App() {
             <Home email={email} user={user} />
             <Posts
               email={email}
-              user={userData}
-              setUserData={setUserData}
+              user={user}
+              //setUserData={setUserData}
               logoutUser={logoutUser}
               posts={posts}
               setPosts={setPosts}
               comments={comments}
               setComments={setComments}
+              //isLoading={isLoading}
             />
           </Route>
           <Route exact path="/profile">
@@ -182,8 +214,10 @@ function App() {
             <Navbar email={email} logoutUser={logoutUser} />
             <Posts
               email={email}
-              user={userData}
-              setUserData={setUserData}
+              user={user}
+              //setUserData={setUserData}
+              //isLoading={isLoading}
+              //setIsLoading={setIsLoading}
               logoutUser={logoutUser}
               posts={posts}
               setPosts={setPosts}

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import defaultUser from "../assets/user.svg";
 import S3 from "react-aws-s3";
+import { createPost, getPosts } from "../data/repository";
 
 //s3 config data
 const S3_BUCKET = "vibe-check-bucket";
@@ -30,6 +31,7 @@ const Posts = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorEditMessage, setErrorEditMessage] = useState(null);
   const [fileSelected, setFileSelected] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   //useLocation hook to retrieve the current page location
   let location = useLocation();
@@ -139,7 +141,7 @@ const Posts = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     //set a new unique id
-    const uuid = uuidv4();
+    //const uuid = uuidv4();
     // Trim the post text.
     const postTrimmed = post.trim();
 
@@ -150,50 +152,44 @@ const Posts = (props) => {
     }
 
     //set new file name as the uuid
-    const newFileName = uuid;
+    //const newFileName = uuid;
 
     let loc = null;
-
+    const dateNow = Date.now().toString();
     //if file input is present, upload the file to react s3 bucket
     if (fileSelected) {
       setErrorMessage("Loading...");
       //The keyword await makes it wait until that promise settles and returns its result.
-      const data = await ReactS3Client.uploadFile(fileSelected, newFileName);
+      const data = await ReactS3Client.uploadFile(fileSelected, dateNow);
       loc = data.location;
     }
 
     //assign post data
-    let postsData = [
-      ...props.posts,
-      {
-        //postid as the uuid
-        postID: uuid,
-        email: props.user.email,
-        name: props.user.name,
-        text: postTrimmed,
-        //australia timezone in a presentable format
-        date: new Date().toLocaleString("en-US", {
-          timeZone: "Australia/Melbourne",
-        }),
-        //the current data
-        dateData: Date.now(),
-        //the s3 data location.
-        imgUrl: loc,
-      },
-    ];
-
+    let newPost = {
+      //postid as the uuid
+      userEmail: props.user.email,
+      text: postTrimmed,
+      //australia timezone in a presentable format
+      date: new Date().toLocaleString("en-US", {
+        timeZone: "Australia/Melbourne",
+      }),
+      //the current data
+      dateData: Date.now(),
+      //the s3 data location.
+      imgUrl: loc,
+    };
+    const resPost = await createPost(newPost);
     //reset the input file field
     document.getElementById("fileUpload").value = "";
     //set the new post and save it in local storage as json format
-    props.setPosts(postsData);
-    localStorage.setItem("posts", JSON.stringify(postsData));
-
+    //props.setPosts(postsData);
+    props.setPosts([...props.posts, resPost]);
     // Reset post content.
     setPost("");
     setErrorMessage("");
     setFileSelected(null);
   };
-
+  console.log(props.posts);
   //get data from local storage by parsing the json
   let users = JSON.parse(localStorage.getItem("users")) || [];
   let comments = JSON.parse(localStorage.getItem("comments")) || [];
@@ -271,12 +267,15 @@ const Posts = (props) => {
             <span className="text-muted">No posts have been submitted.</span>
           ) : (
             props.posts.map((x) => {
-              if (x.email === props.email && location.pathname !== "/home") {
+              if (
+                x.userEmail === props.user.email &&
+                location.pathname !== "/home"
+              ) {
                 return (
                   <div
                     className="border my-3 p-3"
                     style={{ whiteSpace: "pre-wrap" }}
-                    key={x.postID}
+                    key={x.post_id}
                   >
                     <div className="container mt-5 mb-5">
                       <div className="row d-flex align-items-center justify-content-center">
@@ -297,14 +296,16 @@ const Posts = (props) => {
                                     alt="User-Profile"
                                   />
                                 )}
-                                <div className="d-flex flex-column ms-2">
-                                  <span className="fw-bold me-auto">
-                                    {x.name}
-                                  </span>
-                                  <small className="text-primary">
-                                    {x.email}
-                                  </small>
-                                </div>
+                                {x.user && (
+                                  <div className="d-flex flex-column ms-2">
+                                    <span className="fw-bold me-auto">
+                                      {x.user.name}
+                                    </span>
+                                    <small className="text-primary">
+                                      {x.user.email}
+                                    </small>
+                                  </div>
+                                )}
                               </div>
                               <div className="d-flex flex-row ellipsis">
                                 <small className="text-muted">{x.date}</small>
@@ -478,7 +479,7 @@ const Posts = (props) => {
                   <div
                     className="border my-3 p-3"
                     style={{ whiteSpace: "pre-wrap" }}
-                    key={x.postID}
+                    key={x.post_id}
                   >
                     <div className="container mt-5 mb-5">
                       <div className="row d-flex align-items-center justify-content-center">
@@ -486,9 +487,9 @@ const Posts = (props) => {
                           <div className="card">
                             <div className="d-flex justify-content-between p-2 px-3">
                               <div className="d-flex flex-row align-items-center">
-                                {found(x.email).imgUrl ? (
+                                {x.user.imgUrl ? (
                                   <img
-                                    src={found(x.email).imgUrl}
+                                    src={x.user.imgUrl}
                                     className="img-radius"
                                     alt="User-Profile"
                                   />
@@ -501,10 +502,10 @@ const Posts = (props) => {
                                 )}
                                 <div className="d-flex flex-column ms-2">
                                   <span className="fw-bold me-auto">
-                                    {x.name}
+                                    {x.user.name}
                                   </span>
                                   <small className="text-primary">
-                                    {x.email}
+                                    {x.user.email}
                                   </small>
                                 </div>
                               </div>

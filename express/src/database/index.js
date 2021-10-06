@@ -17,9 +17,8 @@ db.user = require("./models/user.js")(db.sequelize, DataTypes);
 db.post = require("./models/post.js")(db.sequelize, DataTypes);
 
 // Relate post and user.
-db.post.belongsTo(db.user, {
-  foreignKey: { name: "username", allowNull: false },
-});
+db.user.hasMany(db.post);
+db.post.belongsTo(db.user);
 
 // Learn more about associations here: https://sequelize.org/master/manual/assocs.html
 
