@@ -65,6 +65,14 @@ async function editPost(post) {
   return response.data;
 }
 
+async function deletePost(post_id) {
+  const response = await axios.delete(
+    API_HOST + `/api/posts/delete/${post_id}`
+  );
+
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -91,4 +99,5 @@ export {
   deleteUser,
   getUsers,
   editPost,
+  deletePost,
 };

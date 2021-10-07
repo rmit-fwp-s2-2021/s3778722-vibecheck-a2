@@ -39,3 +39,13 @@ exports.update = async (req, res) => {
 
   res.json(post);
 };
+
+exports.delete = async (req, res) => {
+  const parsePostId = parseInt(req.params.post_id);
+
+  const post = await db.post.destroy({
+    where: { post_id: parsePostId },
+  });
+
+  res.json(post);
+};

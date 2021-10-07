@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import defaultUser from "../assets/user.svg";
 import S3 from "react-aws-s3";
-import { createPost, getPosts, editPost } from "../data/repository";
+import { createPost, getPosts, editPost, deletePost } from "../data/repository";
 
 //s3 config data
 const S3_BUCKET = "vibe-check-bucket";
@@ -121,22 +121,25 @@ const Posts = (props) => {
   };
 
   //event handler for deleting a post
-  const handleDelete = (event) => {
+  const handleDelete = async (event) => {
     //filter out the matched posts
-    const removedPost = props.posts.filter(
-      (removingPost) => removingPost.postID !== event.target.value
-    );
 
+    await deletePost(event.target.value);
+    const removedPost = props.posts.filter(
+      (removingPost) => removingPost.post_id !== parseInt(event.target.value)
+    );
+    console.log(removedPost);
     //filter out the matched comments
+    /*
     const removedComment = props.comments.filter(
       (removingComment) => removingComment.postID !== event.target.value
     );
-
+      */
     //set and save the data on local storage in json format
-    localStorage.setItem("posts", JSON.stringify(removedPost));
+    //localStorage.setItem("posts", JSON.stringify(removedPost));
     props.setPosts(removedPost);
-    localStorage.setItem("comments", JSON.stringify(removedComment));
-    props.setComments(removedComment);
+    //localStorage.setItem("comments", JSON.stringify(removedComment));
+    //props.setComments(removedComment);
   };
 
   //event handler for form submit with async function
@@ -410,7 +413,7 @@ const Posts = (props) => {
                     <button
                       type="button"
                       className="btn btn-danger"
-                      value={x.post_iD}
+                      value={x.post_id}
                       onClick={handleDelete}
                     >
                       Delete
