@@ -3,7 +3,12 @@ import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import defaultUser from "../assets/user.svg";
 import S3 from "react-aws-s3";
-import { createPost, getPosts, editPost, deletePost } from "../data/repository";
+import {
+  createPost,
+  editPost,
+  deletePost,
+  createComment,
+} from "../data/repository";
 
 //s3 config data
 const S3_BUCKET = "vibe-check-bucket";
@@ -59,30 +64,36 @@ const Posts = (props) => {
   };
 
   //event handler for the comment
-  const handleComment = (event) => {
+  const handleComment = async (event) => {
     event.preventDefault();
+    const commentTrimmed = comment.trim();
+
+    //make sure the post is not empty
+    if (commentTrimmed === "") {
+      alert("A comment cannot be empty.");
+      return;
+    } else if (commentTrimmed.length > 600) {
+      alert("A comment cannot be more than 600 characters long.");
+      return;
+    }
 
     //assign all the comment data with new comment input
-    let commentsData = [
-      ...props.comments,
-      {
-        postID: event.target.value,
-        commentId: uuidv4(),
-        name: props.user.name,
-        comment: comment,
-        email: props.user.email,
-        date: new Date().toLocaleString("en-US", {
-          timeZone: "Australia/Melbourne",
-        }),
-      },
-    ];
+    let newComment = {
+      postPostId: event.target.value,
+      userEmai: props.user.email,
+      text: commentTrimmed,
+      date: new Date().toLocaleString("en-US", {
+        timeZone: "Australia/Melbourne",
+      }),
+    };
+
+    const resComment = await createComment(newComment);
 
     //set the comment data and save it to local storage in json format
-    localStorage.setItem("comments", JSON.stringify(commentsData));
-    props.setComments(commentsData);
+    props.setComments([...comments, resComment]);
     setComment("");
   };
-  console.log(editId);
+
   //event handler for editing a post
   const handleEdit = async (event) => {
     event.preventDefault();
@@ -99,8 +110,6 @@ const Posts = (props) => {
     props.posts.forEach((postTmp) => {
       console.log(postTmp.post_id);
       if (postTmp.post_id === parseInt(editId)) {
-        console.log("runnnnnnnn");
-        console.log(tmpPost);
         tmpPost["post_id"] = postTmp.post_id;
         tmpPost["text"] = postTrimmed;
         tmpPost["imgUrl"] = postTmp.imgUrl;
@@ -154,6 +163,9 @@ const Posts = (props) => {
     //make sure the post is not empty
     if (postTrimmed === "") {
       setErrorMessage("A post cannot be empty.");
+      return;
+    } else if (postTrimmed.length > 600) {
+      setErrorMessage("A post cannot be more than 600 characters long.");
       return;
     }
 

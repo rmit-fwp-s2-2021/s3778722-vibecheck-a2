@@ -73,6 +73,18 @@ async function deletePost(post_id) {
   return response.data;
 }
 
+// --- Comment ------------------------------------------------------------------------------------
+async function getComments() {
+  const response = await axios.get(API_HOST + "/api/comments");
+
+  return response.data;
+}
+
+async function createComment(comment) {
+  const response = await axios.post(API_HOST + "/api/comments", comment);
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -100,4 +112,6 @@ export {
   getUsers,
   editPost,
   deletePost,
+  getComments,
+  createComment,
 };

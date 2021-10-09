@@ -23,6 +23,7 @@ import {
   findUser,
   getPosts,
   getUsers,
+  getComments,
 } from "./data/repository";
 
 //Styled-Components
@@ -46,6 +47,8 @@ function App() {
   const [posts, setPosts] = useState([]);
   //const [isLoading, setIsLoading] = useState(true);
 
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
     async function loadProfile() {
       const currentProfile = await findUser(email);
@@ -63,6 +66,15 @@ function App() {
     }
     loadPosts();
   }, [posts.length]);
+
+  useEffect(() => {
+    async function loadComments() {
+      const currentComments = await getComments();
+      setComments(currentComments);
+      //setIsLoading(false);
+    }
+    loadComments();
+  }, [comments.length]);
 
   /*
   useEffect(() => {
@@ -82,10 +94,11 @@ function App() {
   );*/
 
   //useState hook for comments that retrieve from local storage of 'comments' key.
+  /*
   const [comments, setComments] = useState(
     JSON.parse(localStorage.getItem("comments")) || []
   );
-
+    */
   //useEffect hook for listening to localStorage of current user with side effects
 
   useEffect(() => {

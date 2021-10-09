@@ -15,10 +15,16 @@ db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 // Include models.
 db.user = require("./models/user.js")(db.sequelize, DataTypes);
 db.post = require("./models/post.js")(db.sequelize, DataTypes);
+db.comment = require("./models/comment.js")(db.sequelize, DataTypes);
 
 // Relate post and user.
 db.user.hasMany(db.post);
 db.post.belongsTo(db.user);
+
+db.comment.belongsTo(db.user);
+db.comment.belongsTo(db.post);
+db.user.hasMany(db.comment);
+db.post.hasMany(db.comment);
 
 // Learn more about associations here: https://sequelize.org/master/manual/assocs.html
 
