@@ -37,6 +37,7 @@ async function createUser(user) {
 
 async function editUser(user) {
   const response = await axios.put(API_HOST + "/api/users/edit", user);
+  console.log(response.data);
   return response.data;
 }
 

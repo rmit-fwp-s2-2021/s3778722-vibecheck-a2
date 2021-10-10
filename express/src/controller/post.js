@@ -44,8 +44,8 @@ exports.delete = async (req, res) => {
   const parsePostId = parseInt(req.params.post_id);
 
   const post = await db.post.destroy({
-    where: { post_id: parsePostId },
-  });
+    where: { post_id: parsePostId }, include: db.comment
+  }); 
 
   res.json(post);
 };

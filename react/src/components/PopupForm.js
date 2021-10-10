@@ -55,8 +55,15 @@ const PopupForm = (props) => {
   );
   const trimFields = () => {
     const trimmedFields = {};
-    Object.keys(fields).map((key) => (trimmedFields[key] = fields[key].trim()));
+    Object.keys(fields).map((key) => {
+      if (fields[key] !== null) {
+        trimmedFields[key] = fields[key].trim();
+      } else {
+        trimmedFields[key] = fields[key];
+      }
+    });
     setFields(trimmedFields);
+    console.log(trimmedFields);
     return trimmedFields;
   };
 
@@ -105,6 +112,8 @@ const PopupForm = (props) => {
       setSuccess(false);
     } else {
       const profile = await editUser(trimmedFields);
+      console.log(profile);
+
       props.setUser(profile);
 
       //assign the new edited data
@@ -117,13 +126,26 @@ const PopupForm = (props) => {
         }
       }*/
       //set the new posts from the user changes
-      /*
+      console.log(props.user);
+      console.log(props.posts);
       let newPosts = [...props.posts];
+      console.log(newPosts);
       props.posts.forEach((tmpPost, index) => {
-        if (tmpPost.email === props.currentEmail) {
-          newPosts[index].name = fields.name;
+        if (tmpPost.userEmail === props.user.email) {
+          newPosts[index].user.name = trimmedFields.name;
         }
-      });*/
+      });
+      console.log(newPosts);
+      props.setPosts(newPosts);
+
+      let newComments = [...props.comments];
+      props.comments.forEach((tmpComment, index) => {
+        if (tmpComment.userEmail === props.user.email) {
+          newComments[index].user.name = trimmedFields.name;
+        }
+      });
+
+      props.setComments(newComments);
       //set the new comments from the user changes
       /*
       let newComments = [...props.comments];

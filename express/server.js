@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
 // Add user routes.
 require("./src/routes/user.js")(express, app);
 require("./src/routes/post.js")(express, app);
+require("./src/routes/comment.js")(express, app);
 
 // Set port, listen for requests.
 const PORT = 4000;

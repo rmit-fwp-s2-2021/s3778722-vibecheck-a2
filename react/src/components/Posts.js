@@ -80,17 +80,16 @@ const Posts = (props) => {
     //assign all the comment data with new comment input
     let newComment = {
       postPostId: event.target.value,
-      userEmai: props.user.email,
+      userEmail: props.user.email,
       text: commentTrimmed,
       date: new Date().toLocaleString("en-US", {
         timeZone: "Australia/Melbourne",
       }),
     };
-
     const resComment = await createComment(newComment);
 
     //set the comment data and save it to local storage in json format
-    props.setComments([...comments, resComment]);
+    props.setComments([...props.comments, resComment]);
     setComment("");
   };
 
@@ -210,7 +209,7 @@ const Posts = (props) => {
   console.log(props.posts);
   //get data from local storage by parsing the json
   let users = JSON.parse(localStorage.getItem("users")) || [];
-  let comments = JSON.parse(localStorage.getItem("comments")) || [];
+  // let comments = JSON.parse(localStorage.getItem("comments")) || [];
 
   //find the matching email address
   const found = (email) => {
@@ -219,14 +218,14 @@ const Posts = (props) => {
 
   //filter out the matching comments linked to the post
   const foundComments = (id) => {
-    return comments.filter((c) => c.postID === id);
+    return props.comments.filter((c) => c.postPostId === id);
   };
 
   //event handler for file input
   const handleFileInput = (event) => {
     setFileSelected(event.target.files[0]);
   };
-
+  console.log(props.posts);
   return (
     <>
       {location.pathname !== "/home" && (
@@ -342,12 +341,12 @@ const Posts = (props) => {
                               <hr />
                               <div className="d-flex justify-content-between align-items-center">
                                 <div className="d-flex flex-row muted-color ms-auto">
-                                  {foundComments(x.postID).length} comments
+                                  {foundComments(x.post_id).length} comments
                                 </div>
                               </div>
 
                               {props.comments.map((c) => {
-                                if (c.postID === x.postID) {
+                                if (c.postPostId === x.post_id) {
                                   return (
                                     <>
                                       <hr />
@@ -367,13 +366,13 @@ const Posts = (props) => {
                                         )}
                                         <div className="d-flex flex-column ms-2">
                                           <span className="fw-bold me-auto">
-                                            {c.name}
+                                            {c.user.name}
                                           </span>
                                           <span className="me-auto text-primary">
-                                            {c.email}
+                                            {c.user.email}
                                           </span>
                                           <small className="comment-text me-auto">
-                                            {c.comment}
+                                            {c.text}
                                           </small>
                                           <div className="d-flex flex-row align-items-center status">
                                             <small>{c.date}</small>
@@ -401,7 +400,7 @@ const Posts = (props) => {
                                   type="Submit"
                                   className="btn btn-primary mt-3 mb-2"
                                   onClick={handleComment}
-                                  value={x.postID}
+                                  value={x.post_id}
                                 >
                                   Comment
                                 </button>
@@ -546,20 +545,20 @@ const Posts = (props) => {
                                 <div className="d-flex flex-row muted-color ms-auto">
                                   {" "}
                                   <span className="me-2">
-                                    {foundComments(x.postID).length} comments
+                                    {foundComments(x.post_id).length} comments
                                   </span>{" "}
                                 </div>
                               </div>
 
                               {props.comments.map((c) => {
-                                if (c.postID === x.postID) {
+                                if (c.postPostId === x.post_id) {
                                   return (
                                     <>
                                       <hr />
                                       <div className="d-flex flex-row align-items-center">
-                                        {found(c.email).imgUrl ? (
+                                        {c.user.imgUrl ? (
                                           <img
-                                            src={found(c.email).imgUrl}
+                                            src={c.user.imgUrl}
                                             className="img-radius"
                                             alt="User-Profile"
                                           />
@@ -572,13 +571,13 @@ const Posts = (props) => {
                                         )}
                                         <div className="d-flex flex-column ms-2">
                                           <span className="fw-bold me-auto">
-                                            {c.name}
+                                            {c.user.name}
                                           </span>
                                           <span className="me-auto text-primary">
-                                            {c.email}
+                                            {c.user.email}
                                           </span>
                                           <small className="comment-text me-auto">
-                                            {c.comment}
+                                            {c.text}
                                           </small>
                                           <div className="d-flex flex-row align-items-center status">
                                             <small>{c.date}</small>
@@ -606,7 +605,7 @@ const Posts = (props) => {
                                   type="Submit"
                                   className="btn btn-primary mt-3 mb-2"
                                   onClick={handleComment}
-                                  value={x.postID}
+                                  value={x.post_id}
                                 >
                                   Comment
                                 </button>

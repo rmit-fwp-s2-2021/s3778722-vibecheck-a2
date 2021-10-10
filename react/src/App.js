@@ -56,6 +56,7 @@ function App() {
       //setFieldsNullToEmpty(currentProfile);
     }
     loadProfile();
+    console.log("run");
   }, [email]);
 
   useEffect(() => {
@@ -221,7 +222,15 @@ function App() {
               setComments={setComments}
             />
             comment here */}
-            <Profile user={user} setUser={setUser} logoutUser={logoutUser} />
+            <Profile
+              user={user}
+              setUser={setUser}
+              logoutUser={logoutUser}
+              posts={posts}
+              setPosts={setPosts}
+              comments={comments}
+              setComments={setComments}
+            />
           </Route>
           <Route exact path="/posting">
             <Navbar email={email} logoutUser={logoutUser} />

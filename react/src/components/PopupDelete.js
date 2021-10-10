@@ -36,7 +36,14 @@ const PopupDelete = (props) => {
     const removeComments = comments.filter(
       (comment) => comment.email !== props.email
     ); */
-
+    const removePosts = props.posts.filter(
+      (post) => post.userEmail !== props.user.email
+    );
+    const removeComments = props.comments.filter(
+      (comment) => comment.userEmail !== props.user.email
+    );
+    props.setPosts(removePosts);
+    props.setComments(removeComments);
     //set the new data with the deleted user on local storage
     /* localStorage.setItem("users", JSON.stringify(removeUser));
 
