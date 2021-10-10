@@ -340,8 +340,30 @@ const Posts = (props) => {
                               <p className="text-center">{x.text}</p>
                               <hr />
                               <div className="d-flex justify-content-between align-items-center">
+                                <div className="d-flex flex-row muted-color me-auto">
+                                  <button
+                                    type="button"
+                                    class="btn btn-outline-primary btn-sm me-2"
+                                  >
+                                    Like
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                  >
+                                    Dislike
+                                  </button>
+                                </div>
                                 <div className="d-flex flex-row muted-color ms-auto">
-                                  {foundComments(x.post_id).length} comments
+                                  <p className="badge bg-primary text-wrap mt-2 me-2">
+                                    0 Likes{" "}
+                                  </p>
+                                  <p className="badge bg-danger text-wrap mt-2 me-2">
+                                    0 Dislikes{" "}
+                                  </p>
+                                  <p className="badge bg-secondary text-wrap mt-2 me-2">
+                                    {foundComments(x.post_id).length} Comments
+                                  </p>
                                 </div>
                               </div>
 
@@ -371,12 +393,35 @@ const Posts = (props) => {
                                           <span className="me-auto text-primary">
                                             {c.user.email}
                                           </span>
-                                          <small className="comment-text me-auto">
+                                          <small className="text-comment me-auto">
                                             {c.text}
                                           </small>
-                                          <div className="d-flex flex-row align-items-center status">
+                                          <div className="d-flex flex-row align-items-center badge bg-secondary text-wrap">
                                             <small>{c.date}</small>
                                           </div>
+                                          <div className="d-flex flex-row muted-color ">
+                                            <p className="badge bg-primary text-wrap mt-2 me-2">
+                                              0 Likes{" "}
+                                            </p>
+                                            <p className="badge bg-danger text-wrap mt-2">
+                                              0 Dislikes{" "}
+                                            </p>
+                                          </div>
+                                        </div>
+
+                                        <div className="d-flex flex-row muted-color ms-auto">
+                                          <button
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm me-2"
+                                          >
+                                            Like
+                                          </button>
+                                          <button
+                                            type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                          >
+                                            Dislike
+                                          </button>
                                         </div>
                                       </div>
                                     </>
@@ -542,11 +587,30 @@ const Posts = (props) => {
                               <p className="text-center">{x.text}</p>
                               <hr />
                               <div className="d-flex justify-content-between align-items-center">
+                                <div className="d-flex flex-row muted-color me-auto">
+                                  <button
+                                    type="button"
+                                    class="btn btn-outline-primary btn-sm me-2"
+                                  >
+                                    Like
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                  >
+                                    Dislike
+                                  </button>
+                                </div>
                                 <div className="d-flex flex-row muted-color ms-auto">
-                                  {" "}
-                                  <span className="me-2">
+                                  <p className="badge bg-primary text-wrap mt-2 me-2">
+                                    0 Likes{" "}
+                                  </p>
+                                  <p className="badge bg-danger text-wrap mt-2 me-2">
+                                    0 Dislikes{" "}
+                                  </p>
+                                  <p className="badge bg-secondary text-wrap mt-2 me-2">
                                     {foundComments(x.post_id).length} comments
-                                  </span>{" "}
+                                  </p>
                                 </div>
                               </div>
 
@@ -579,9 +643,31 @@ const Posts = (props) => {
                                           <small className="comment-text me-auto">
                                             {c.text}
                                           </small>
-                                          <div className="d-flex flex-row align-items-center status">
+                                          <div className="d-flex flex-row align-items-center badge bg-secondary text-wrap">
                                             <small>{c.date}</small>
                                           </div>
+                                          <div className="d-flex flex-row muted-color ">
+                                            <p className="badge bg-primary text-wrap mt-2 me-2">
+                                              0 Likes{" "}
+                                            </p>
+                                            <p className="badge bg-danger text-wrap mt-2">
+                                              0 Dislikes{" "}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="d-flex flex-row muted-color ms-auto">
+                                          <button
+                                            type="button"
+                                            class="btn btn-outline-primary btn-sm me-2"
+                                          >
+                                            Like
+                                          </button>
+                                          <button
+                                            type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                          >
+                                            Dislike
+                                          </button>
                                         </div>
                                       </div>
                                     </>
