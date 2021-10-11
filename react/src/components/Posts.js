@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import defaultUser from "../assets/user.svg";
 import S3 from "react-aws-s3";
 import {
@@ -11,6 +10,7 @@ import {
   getPostLikes,
   getPosts,
   editPostLikes,
+  createPostLikes,
 } from "../data/repository";
 
 //s3 config data
@@ -35,24 +35,20 @@ const Posts = (props) => {
   const [post, setPost] = useState("");
   const [comment, setComment] = useState("");
   const [postEdit, setPostEdit] = useState("");
-  const [postLike, setPostLike] = useState(null);
   const [postLikes, setPostLikes] = useState([]);
   const [editId, setEditId] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorEditMessage, setErrorEditMessage] = useState(null);
   const [fileSelected, setFileSelected] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadPostLikes() {
       const currentPostLikes = await getPostLikes();
       const currentPosts = await getPosts();
-      console.log(currentPostLikes);
       setPostLikes(currentPostLikes);
       props.setPosts(currentPosts);
     }
     loadPostLikes();
-    console.log("run");
   }, [postLikes.length]);
 
   //useLocation hook to retrieve the current page location
@@ -79,13 +75,35 @@ const Posts = (props) => {
     setErrorEditMessage(null);
     setEditId(event.target.value);
   };
+  const handleCreatePostLike = async (event) => {
+    event.preventDefault();
+    let newPostLike = {
+      like: true,
+      dislike: false,
+      userEmail: props.user.email,
+      postPostId: parseInt(event.target.value),
+    };
+    const tmpPostLike = await createPostLikes(newPostLike);
+    setPostLikes([...postLikes, tmpPostLike]);
+  };
+
+  const handleCreatePostDislike = async (event) => {
+    event.preventDefault();
+    let newPostLike = {
+      like: false,
+      dislike: true,
+      userEmail: props.user.email,
+      postPostId: parseInt(event.target.value),
+    };
+    const tmpPostLike = await createPostLikes(newPostLike);
+    setPostLikes([...postLikes, tmpPostLike]);
+  };
 
   const handlePostLike = async (event) => {
     event.preventDefault();
     //const post = props.posts.find((post) => post.post_id === event.target.value)
     let tmpPostLike = {};
     //loop through the post data and assign the new post input
-    console.log(event.target.value);
     postLikes.forEach((x) => {
       if (x.postlike_id === parseInt(event.target.value)) {
         tmpPostLike["postlike_id"] = x.postlike_id;
@@ -95,10 +113,8 @@ const Posts = (props) => {
         tmpPostLike["userEmail"] = x.userEmail;
       }
     });
-    console.log(tmpPostLike);
     const editedPostLike = await editPostLikes(tmpPostLike);
     setPostLikes([...postLikes, editedPostLike]);
-    console.log(postLikes);
   };
 
   const handlePostDislike = async (event) => {
@@ -106,7 +122,7 @@ const Posts = (props) => {
     //const post = props.posts.find((post) => post.post_id === event.target.value)
     let tmpPostDislike = {};
     //loop through the post data and assign the new post input
-    console.log(event.target.value);
+
     postLikes.forEach((x) => {
       if (x.postlike_id === parseInt(event.target.value)) {
         tmpPostDislike["postlike_id"] = x.postlike_id;
@@ -116,13 +132,10 @@ const Posts = (props) => {
         tmpPostDislike["userEmail"] = x.userEmail;
       }
     });
-    console.log(tmpPostDislike);
+
     const editedPostLike = await editPostLikes(tmpPostDislike);
     setPostLikes([...postLikes, editedPostLike]);
-    console.log(postLikes);
   };
-
-  console.log(postLikes);
 
   const showPostLikesDislikes = (userEmail, post) => {
     const found = () => {
@@ -181,16 +194,16 @@ const Posts = (props) => {
           <button
             type="button"
             className="btn btn-outline-primary btn-sm me-2"
-            value={"a"}
-            onClick={handlePostLike}
+            value={post.post_id}
+            onClick={handleCreatePostLike}
           >
             Like
           </button>
           <button
             type="button"
             className="btn btn-outline-danger btn-sm"
-            value={"a"}
-            onClick={handlePostLike}
+            value={post.post_id}
+            onClick={handleCreatePostDislike}
           >
             Dislike
           </button>
@@ -347,9 +360,10 @@ const Posts = (props) => {
   // let comments = JSON.parse(localStorage.getItem("comments")) || [];
 
   //find the matching email address
+  /*
   const found = (email) => {
     return users.find((u) => u.email === email);
-  };
+  };*/
 
   //filter out the matching comments linked to the post
   const foundComments = (id) => {
@@ -359,7 +373,6 @@ const Posts = (props) => {
   const countLikes = (post) => {
     if (post.postLikes) {
       const list = post.postLikes.filter((x) => x.like === true);
-      console.log(list);
       return list.length;
     }
   };
@@ -367,11 +380,9 @@ const Posts = (props) => {
   const countDislikes = (post) => {
     if (post.postLikes) {
       const list = post.postLikes.filter((x) => x.dislike === true);
-      console.log(list);
       return list.length;
     }
   };
-  console.log(props.posts);
   //event handler for file input
   const handleFileInput = (event) => {
     setFileSelected(event.target.files[0]);
@@ -510,7 +521,7 @@ const Posts = (props) => {
                               {props.comments.map((c) => {
                                 if (c.postPostId === x.post_id) {
                                   return (
-                                    <>
+                                    <div key={c.comment_id}>
                                       <hr />
                                       <div className="d-flex flex-row align-items-center">
                                         {props.user.imgUrl ? (
@@ -564,7 +575,7 @@ const Posts = (props) => {
                                           </button>
                                         </div>
                                       </div>
-                                    </>
+                                    </div>
                                   );
                                 }
                                 return null;
@@ -757,7 +768,7 @@ const Posts = (props) => {
                               {props.comments.map((c) => {
                                 if (c.postPostId === x.post_id) {
                                   return (
-                                    <>
+                                    <div key={c.comment_id}>
                                       <hr />
                                       <div className="d-flex flex-row align-items-center">
                                         {c.user.imgUrl ? (
@@ -810,7 +821,7 @@ const Posts = (props) => {
                                           </button>
                                         </div>
                                       </div>
-                                    </>
+                                    </div>
                                   );
                                 }
                                 return null;

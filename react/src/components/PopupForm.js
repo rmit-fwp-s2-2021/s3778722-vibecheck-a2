@@ -57,9 +57,9 @@ const PopupForm = (props) => {
     const trimmedFields = {};
     Object.keys(fields).map((key) => {
       if (fields[key] !== null) {
-        trimmedFields[key] = fields[key].trim();
+        return (trimmedFields[key] = fields[key].trim());
       } else {
-        trimmedFields[key] = fields[key];
+        return (trimmedFields[key] = fields[key]);
       }
     });
     setFields(trimmedFields);
