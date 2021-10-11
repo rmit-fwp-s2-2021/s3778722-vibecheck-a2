@@ -86,6 +86,23 @@ async function createComment(comment) {
   return response.data;
 }
 
+// Likes
+async function getPostLikes() {
+  const response = await axios.get(API_HOST + "/api/postlikes");
+
+  return response.data;
+}
+
+async function createPostLikes(postlike) {
+  const response = await axios.post(API_HOST + "/api/postlikes", postlike);
+  return response.data;
+}
+
+async function editPostLikes(postlike) {
+  const response = await axios.put(API_HOST + "/api/postlikes/edit", postlike);
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -115,4 +132,7 @@ export {
   deletePost,
   getComments,
   createComment,
+  getPostLikes,
+  createPostLikes,
+  editPostLikes,
 };

@@ -5,7 +5,7 @@ exports.all = async (req, res) => {
   //const posts = await db.post.findAll();
 
   // Can use eager loading to join tables if needed, for example:
-  const posts = await db.post.findAll({ include: db.user });
+  const posts = await db.post.findAll({ include: [db.user, db.postLike] });
 
   // Learn more about eager loading here: https://sequelize.org/master/manual/eager-loading.html
   res.json(posts);
@@ -44,8 +44,9 @@ exports.delete = async (req, res) => {
   const parsePostId = parseInt(req.params.post_id);
 
   const post = await db.post.destroy({
-    where: { post_id: parsePostId }, include: db.comment
-  }); 
+    where: { post_id: parsePostId },
+    include: db.comment,
+  });
 
   res.json(post);
 };

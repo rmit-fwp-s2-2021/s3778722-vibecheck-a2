@@ -56,7 +56,6 @@ function App() {
       //setFieldsNullToEmpty(currentProfile);
     }
     loadProfile();
-    console.log("run");
   }, [email]);
 
   useEffect(() => {
