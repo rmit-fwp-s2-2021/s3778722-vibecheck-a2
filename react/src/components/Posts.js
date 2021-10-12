@@ -904,25 +904,14 @@ const Posts = (props) => {
                               <hr />
                               <div className="d-flex justify-content-between align-items-center">
                                 <div className="d-flex flex-row muted-color me-auto">
-                                  <button
-                                    type="button"
-                                    className="btn btn-outline-primary btn-sm me-2"
-                                  >
-                                    Like
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="btn btn-outline-danger btn-sm"
-                                  >
-                                    Dislike
-                                  </button>
+                                  {showPostLikesDislikes(props.user.email, x)}
                                 </div>
                                 <div className="d-flex flex-row muted-color ms-auto">
                                   <p className="badge bg-primary text-wrap mt-2 me-2">
-                                    0 Likes{" "}
+                                    {countLikes(x)} Likes{" "}
                                   </p>
                                   <p className="badge bg-danger text-wrap mt-2 me-2">
-                                    0 Dislikes{" "}
+                                    {countDislikes(x)} Dislikes{" "}
                                   </p>
                                   <p className="badge bg-secondary text-wrap mt-2 me-2">
                                     {foundComments(x.post_id).length} comments
@@ -964,26 +953,18 @@ const Posts = (props) => {
                                           </div>
                                           <div className="d-flex flex-row muted-color ">
                                             <p className="badge bg-primary text-wrap mt-2 me-2">
-                                              0 Likes{" "}
+                                              {countCommentLikes(c)} Likes{" "}
                                             </p>
                                             <p className="badge bg-danger text-wrap mt-2">
-                                              0 Dislikes{" "}
+                                              {countCommentDislikes(c)} Dislikes{" "}
                                             </p>
                                           </div>
                                         </div>
                                         <div className="d-flex flex-row muted-color ms-auto">
-                                          <button
-                                            type="button"
-                                            className="btn btn-outline-primary btn-sm me-2"
-                                          >
-                                            Like
-                                          </button>
-                                          <button
-                                            type="button"
-                                            className="btn btn-outline-danger btn-sm"
-                                          >
-                                            Dislike
-                                          </button>
+                                          {showCommentLikesDislikes(
+                                            props.user.email,
+                                            c
+                                          )}
                                         </div>
                                       </div>
                                     </div>
