@@ -5,7 +5,9 @@ exports.all = async (req, res) => {
   //const posts = await db.post.findAll();
 
   // Can use eager loading to join tables if needed, for example:
-  const comments = await db.comment.findAll({ include: [db.user, db.post] });
+  const comments = await db.comment.findAll({
+    include: [db.user, db.post, db.commentLike],
+  });
 
   // Learn more about eager loading here: https://sequelize.org/master/manual/eager-loading.html
   res.json(comments);

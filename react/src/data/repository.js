@@ -86,7 +86,7 @@ async function createComment(comment) {
   return response.data;
 }
 
-// Likes
+// Post Likes
 async function getPostLikes() {
   const response = await axios.get(API_HOST + "/api/postlikes");
 
@@ -100,6 +100,29 @@ async function createPostLikes(postlike) {
 
 async function editPostLikes(postlike) {
   const response = await axios.put(API_HOST + "/api/postlikes/edit", postlike);
+  return response.data;
+}
+
+// Comment Likes
+async function getCommentLikes() {
+  const response = await axios.get(API_HOST + "/api/commentlikes");
+
+  return response.data;
+}
+
+async function createCommentLikes(commentlike) {
+  const response = await axios.post(
+    API_HOST + "/api/commentlikes",
+    commentlike
+  );
+  return response.data;
+}
+
+async function editCommentLikes(commentlike) {
+  const response = await axios.put(
+    API_HOST + "/api/commentlikes/edit",
+    commentlike
+  );
   return response.data;
 }
 
@@ -135,4 +158,7 @@ export {
   getPostLikes,
   createPostLikes,
   editPostLikes,
+  getCommentLikes,
+  createCommentLikes,
+  editCommentLikes,
 };

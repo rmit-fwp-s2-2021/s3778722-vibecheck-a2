@@ -55,6 +55,7 @@ function App() {
       setUser(currentProfile);
       //setFieldsNullToEmpty(currentProfile);
     }
+    console.log("run here");
     loadProfile();
   }, [email]);
 

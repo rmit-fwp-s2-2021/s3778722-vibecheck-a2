@@ -17,17 +17,12 @@ db.user = require("./models/user.js")(db.sequelize, DataTypes);
 db.post = require("./models/post.js")(db.sequelize, DataTypes);
 db.comment = require("./models/comment.js")(db.sequelize, DataTypes);
 db.postLike = require("./models/postLike.js")(db.sequelize, DataTypes);
+db.commentLike = require("./models/commentLike.js")(db.sequelize, DataTypes);
 
 // Relate post and user.
 db.user.hasMany(db.post, { onDelete: "cascade", hooks: true });
 db.post.belongsTo(db.user);
 
-db.comment.belongsTo(db.user, {
-  onDelete: "cascade",
-});
-db.comment.belongsTo(db.post, {
-  onDelete: "cascade",
-});
 db.user.hasMany(db.comment, { onDelete: "cascade", hooks: true });
 db.post.hasMany(db.comment, { onDelete: "cascade", hooks: true });
 
@@ -39,6 +34,20 @@ db.postLike.belongsTo(db.user, {
   onDelete: "cascade",
 });
 
+db.comment.hasMany(db.commentLike, { onDelete: "cascade", hooks: true });
+db.comment.belongsTo(db.user, {
+  onDelete: "cascade",
+});
+db.comment.belongsTo(db.post, {
+  onDelete: "cascade",
+});
+
+db.commentLike.belongsTo(db.comment, {
+  onDelete: "cascade",
+});
+db.commentLike.belongsTo(db.user, {
+  onDelete: "cascade",
+});
 // Learn more about associations here: https://sequelize.org/master/manual/assocs.html
 
 // Include a sync option with seed data logic included.

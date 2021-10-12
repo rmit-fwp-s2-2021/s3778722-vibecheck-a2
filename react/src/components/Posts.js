@@ -9,8 +9,12 @@ import {
   createComment,
   getPostLikes,
   getPosts,
+  getComments,
   editPostLikes,
   createPostLikes,
+  getCommentLikes,
+  editCommentLikes,
+  createCommentLikes,
 } from "../data/repository";
 
 //s3 config data
@@ -36,6 +40,7 @@ const Posts = (props) => {
   const [comment, setComment] = useState("");
   const [postEdit, setPostEdit] = useState("");
   const [postLikes, setPostLikes] = useState([]);
+  const [commentLikes, setCommentLikes] = useState([]);
   const [editId, setEditId] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorEditMessage, setErrorEditMessage] = useState(null);
@@ -51,6 +56,18 @@ const Posts = (props) => {
     loadPostLikes();
   }, [postLikes.length]);
 
+  useEffect(() => {
+    async function loadCommentLikes() {
+      const currentCommentLikes = await getCommentLikes();
+      const currentComments = await getComments();
+      setCommentLikes(currentCommentLikes);
+      props.setComments(currentComments);
+    }
+    loadCommentLikes();
+    console.log("run comments");
+  }, [commentLikes.length]);
+
+  console.log(props.comments);
   //useLocation hook to retrieve the current page location
   let location = useLocation();
 
@@ -75,6 +92,7 @@ const Posts = (props) => {
     setErrorEditMessage(null);
     setEditId(event.target.value);
   };
+
   const handleCreatePostLike = async (event) => {
     event.preventDefault();
     let newPostLike = {
@@ -97,6 +115,32 @@ const Posts = (props) => {
     };
     const tmpPostLike = await createPostLikes(newPostLike);
     setPostLikes([...postLikes, tmpPostLike]);
+  };
+
+  const handleCreateCommentLike = async (event) => {
+    event.preventDefault();
+    console.log("run");
+    let newCommentLike = {
+      like: true,
+      dislike: false,
+      userEmail: props.user.email,
+      commentCommentId: parseInt(event.target.value),
+    };
+    const tmpCommentLike = await createCommentLikes(newCommentLike);
+    console.log(tmpCommentLike);
+    setCommentLikes([...commentLikes, tmpCommentLike]);
+  };
+
+  const handleCreateCommentDislike = async (event) => {
+    event.preventDefault();
+    let newCommentLike = {
+      like: false,
+      dislike: true,
+      userEmail: props.user.email,
+      commentCommentId: parseInt(event.target.value),
+    };
+    const tmpCommentLike = await createCommentLikes(newCommentLike);
+    setCommentLikes([...commentLikes, tmpCommentLike]);
   };
 
   const handlePostLike = async (event) => {
@@ -135,6 +179,44 @@ const Posts = (props) => {
 
     const editedPostLike = await editPostLikes(tmpPostDislike);
     setPostLikes([...postLikes, editedPostLike]);
+  };
+
+  const handleCommentLike = async (event) => {
+    event.preventDefault();
+    //const post = props.posts.find((post) => post.post_id === event.target.value)
+    let tmpCommentLike = {};
+    //loop through the post data and assign the new post input
+    commentLikes.forEach((x) => {
+      if (x.commentlike_id === parseInt(event.target.value)) {
+        tmpCommentLike["commentlike_id"] = x.commentlike_id;
+        tmpCommentLike["like"] = true;
+        tmpCommentLike["dislike"] = false;
+        tmpCommentLike["commentCommentId"] = x.commentCommentId;
+        tmpCommentLike["userEmail"] = x.userEmail;
+      }
+    });
+    const editedCommentLike = await editCommentLikes(tmpCommentLike);
+    setCommentLikes([...commentLikes, editedCommentLike]);
+  };
+
+  const handleCommentDislike = async (event) => {
+    event.preventDefault();
+    //const post = props.posts.find((post) => post.post_id === event.target.value)
+    let tmpCommentDislike = {};
+    //loop through the post data and assign the new post input
+
+    commentLikes.forEach((x) => {
+      if (x.commentlike_id === parseInt(event.target.value)) {
+        tmpCommentDislike["commentlike_id"] = x.commentlike_id;
+        tmpCommentDislike["like"] = false;
+        tmpCommentDislike["dislike"] = true;
+        tmpCommentDislike["commentCommentId"] = x.commentCommentId;
+        tmpCommentDislike["userEmail"] = x.userEmail;
+      }
+    });
+
+    const editedCommentLike = await editCommentLikes(tmpCommentDislike);
+    setCommentLikes([...commentLikes, editedCommentLike]);
   };
 
   const showPostLikesDislikes = (userEmail, post) => {
@@ -204,6 +286,83 @@ const Posts = (props) => {
             className="btn btn-outline-danger btn-sm"
             value={post.post_id}
             onClick={handleCreatePostDislike}
+          >
+            Dislike
+          </button>
+        </>
+      );
+    }
+  };
+
+  const showCommentLikesDislikes = (userEmail, comment) => {
+    const found = () => {
+      if (comment.commentLikes) {
+        return comment.commentLikes.find(
+          (x) =>
+            x.userEmail === userEmail &&
+            x.commentCommentId === comment.comment_id
+        );
+      }
+    };
+    console.log(comment);
+    if (
+      found() &&
+      found().like === true &&
+      found().dislike === false &&
+      found().userEmail === userEmail
+    ) {
+      return (
+        <>
+          <button type="button" className="btn btn-primary btn-sm me-2">
+            Like
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-danger btn-sm"
+            value={found().commentlike_id}
+            onClick={handleCommentDislike}
+          >
+            Dislike
+          </button>
+        </>
+      );
+    } else if (
+      found() &&
+      found().like === false &&
+      found().dislike === true &&
+      found().userEmail === userEmail
+    ) {
+      return (
+        <>
+          <button
+            type="button"
+            className="btn btn-outline-primary btn-sm me-2"
+            value={found().commentlike_id}
+            onClick={handleCommentLike}
+          >
+            Like
+          </button>
+          <button type="button" className="btn btn-danger btn-sm">
+            Dislike
+          </button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <button
+            type="button"
+            className="btn btn-outline-primary btn-sm me-2"
+            value={comment.comment_id}
+            onClick={handleCreateCommentLike}
+          >
+            Like
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-danger btn-sm"
+            value={comment.comment_id}
+            onClick={handleCreateCommentDislike}
           >
             Dislike
           </button>
@@ -383,6 +542,20 @@ const Posts = (props) => {
       return list.length;
     }
   };
+
+  const countCommentLikes = (comment) => {
+    if (comment.commentLikes) {
+      const list = comment.commentLikes.filter((x) => x.like === true);
+      return list.length;
+    }
+  };
+
+  const countCommentDislikes = (comment) => {
+    if (comment.commentLikes) {
+      const list = comment.commentLikes.filter((x) => x.dislike === true);
+      return list.length;
+    }
+  };
   //event handler for file input
   const handleFileInput = (event) => {
     setFileSelected(event.target.files[0]);
@@ -552,27 +725,19 @@ const Posts = (props) => {
                                           </div>
                                           <div className="d-flex flex-row muted-color ">
                                             <p className="badge bg-primary text-wrap mt-2 me-2">
-                                              0 Likes{" "}
+                                              {countCommentLikes(c)} Likes{" "}
                                             </p>
                                             <p className="badge bg-danger text-wrap mt-2">
-                                              0 Dislikes{" "}
+                                              {countCommentDislikes(c)} Dislikes{" "}
                                             </p>
                                           </div>
                                         </div>
 
                                         <div className="d-flex flex-row muted-color ms-auto">
-                                          <button
-                                            type="button"
-                                            className="btn btn-outline-primary btn-sm me-2"
-                                          >
-                                            Like
-                                          </button>
-                                          <button
-                                            type="button"
-                                            className="btn btn-outline-danger btn-sm"
-                                          >
-                                            Dislike
-                                          </button>
+                                          {showCommentLikesDislikes(
+                                            props.user.email,
+                                            c
+                                          )}
                                         </div>
                                       </div>
                                     </div>
