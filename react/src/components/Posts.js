@@ -46,28 +46,27 @@ const Posts = (props) => {
   const [errorEditMessage, setErrorEditMessage] = useState(null);
   const [fileSelected, setFileSelected] = useState(null);
 
+  const { setPosts, setComments } = props;
   useEffect(() => {
     async function loadPostLikes() {
       const currentPostLikes = await getPostLikes();
       const currentPosts = await getPosts();
       setPostLikes(currentPostLikes);
-      props.setPosts(currentPosts);
+      setPosts(currentPosts);
     }
     loadPostLikes();
-  }, [postLikes.length]);
+  }, [setPosts, postLikes.length]);
 
   useEffect(() => {
     async function loadCommentLikes() {
       const currentCommentLikes = await getCommentLikes();
       const currentComments = await getComments();
       setCommentLikes(currentCommentLikes);
-      props.setComments(currentComments);
+      setComments(currentComments);
     }
     loadCommentLikes();
-    console.log("run comments");
-  }, [commentLikes.length]);
+  }, [setComments, commentLikes.length]);
 
-  console.log(props.comments);
   //useLocation hook to retrieve the current page location
   let location = useLocation();
 
@@ -119,7 +118,7 @@ const Posts = (props) => {
 
   const handleCreateCommentLike = async (event) => {
     event.preventDefault();
-    console.log("run");
+
     let newCommentLike = {
       like: true,
       dislike: false,
@@ -127,7 +126,7 @@ const Posts = (props) => {
       commentCommentId: parseInt(event.target.value),
     };
     const tmpCommentLike = await createCommentLikes(newCommentLike);
-    console.log(tmpCommentLike);
+
     setCommentLikes([...commentLikes, tmpCommentLike]);
   };
 
@@ -304,7 +303,6 @@ const Posts = (props) => {
         );
       }
     };
-    console.log(comment);
     if (
       found() &&
       found().like === true &&
@@ -515,7 +513,7 @@ const Posts = (props) => {
     setFileSelected(null);
   };
   //get data from local storage by parsing the json
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+
   // let comments = JSON.parse(localStorage.getItem("comments")) || [];
 
   //find the matching email address

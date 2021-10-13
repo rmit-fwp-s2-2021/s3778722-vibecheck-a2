@@ -23,7 +23,6 @@ import {
   removeUser,
   findUser,
   getPosts,
-  getUsers,
   getComments,
 } from "./data/repository";
 
@@ -35,9 +34,6 @@ const Wrapper = styled.section`
 
 function App() {
   //useState hook for userData that retrieve from local storage of 'users' key.
-  const [userData, setUserData] = useState(
-    JSON.parse(localStorage.getItem("users")) || []
-  );
 
   //useState hook for currentUser, which uses email as unique identifier that retrieve from local storage of 'currentUser' key.
   const [email, setEmail] = useState(localStorage.getItem("currentUser"));
@@ -56,7 +52,6 @@ function App() {
       setUser(currentProfile);
       //setFieldsNullToEmpty(currentProfile);
     }
-    console.log("run here");
     loadProfile();
   }, [email]);
 
@@ -116,6 +111,7 @@ function App() {
   }, []);*/
 
   //function to filter and find the current user data
+  /*
   const currentUser = () => {
     if (userData !== null) {
       //Necessary to use the original for-loop to loop through it because for-of loop won't work here.
@@ -125,7 +121,7 @@ function App() {
         }
       }
     }
-  };
+  };*/
   //currentUser();
 
   //check if user is logged in

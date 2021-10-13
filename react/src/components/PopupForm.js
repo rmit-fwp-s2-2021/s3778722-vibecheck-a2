@@ -46,7 +46,6 @@ const PopupForm = (props) => {
   };
 
   //get the users from the local storage by parsing the JSON format
-  let users = JSON.parse(localStorage.getItem("users"));
 
   //password regex to validate the correct format:
   //at least six characters and should be a mix of uppercase and lowercase characters, numbers and special characters.
@@ -63,7 +62,7 @@ const PopupForm = (props) => {
       }
     });
     setFields(trimmedFields);
-    console.log(trimmedFields);
+
     return trimmedFields;
   };
 
@@ -112,7 +111,6 @@ const PopupForm = (props) => {
       setSuccess(false);
     } else {
       const profile = await editUser(trimmedFields);
-      console.log(profile);
 
       props.setUser(profile);
 
@@ -126,16 +124,15 @@ const PopupForm = (props) => {
         }
       }*/
       //set the new posts from the user changes
-      console.log(props.user);
-      console.log(props.posts);
+
       let newPosts = [...props.posts];
-      console.log(newPosts);
+
       props.posts.forEach((tmpPost, index) => {
         if (tmpPost.userEmail === props.user.email) {
           newPosts[index].user.name = trimmedFields.name;
         }
       });
-      console.log(newPosts);
+
       props.setPosts(newPosts);
 
       let newComments = [...props.comments];

@@ -140,6 +140,14 @@ async function createFollows(user) {
   return response.data;
 }
 
+async function deleteFollow(follow_id) {
+  const response = await axios.delete(
+    API_HOST + `/api/follows/delete/${follow_id}`
+  );
+
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -177,4 +185,5 @@ export {
   editCommentLikes,
   getFollows,
   createFollows,
+  deleteFollow,
 };

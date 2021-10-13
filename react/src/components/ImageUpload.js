@@ -47,7 +47,6 @@ const ImageUpload = (props) => {
     //execute s3 file upload with new filename set as current user email
     await ReactS3Client.uploadFile(file, props.user.email)
       .then((data) => {
-        console.log(data);
         alert("Upload complete");
         setAlertMessage(null);
       })
@@ -63,7 +62,6 @@ const ImageUpload = (props) => {
     user["imgUrl"] =
       "https://vibe-check-bucket.s3-us-east-2.amazonaws.com/" + user.email;
 
-    const userJSON = JSON.stringify(user);
     const newUser = await editUser(user);
     props.setUser(newUser);
 

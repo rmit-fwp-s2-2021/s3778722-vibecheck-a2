@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getFollows, getUsers, createFollows } from "../data/repository";
+import {
+  getFollows,
+  getUsers,
+  createFollows,
+  deleteFollow,
+} from "../data/repository";
 
 const Follow = (props) => {
   const [follows, setFollows] = useState([]);
@@ -20,8 +25,6 @@ const Follow = (props) => {
     loadUsers();
   }, [follows.length]);
 
-  console.log(follows);
-  console.log(users);
   const currentUserFollowings = () => {
     return follows.filter((f) => f.userEmail === props.user.email);
   };
@@ -51,8 +54,14 @@ const Follow = (props) => {
       followEmail: event.target.value,
     };
     const tmpFollows = await createFollows(newFollow);
-    console.log(tmpFollows);
+
     setFollows([...follows, tmpFollows]);
+  };
+
+  const handleUnfollow = async (event) => {
+    event.preventDefault();
+    const deletedFollow = await deleteFollow(event.target.value);
+    setFollows([...follows, deletedFollow]);
   };
 
   return (
@@ -100,6 +109,7 @@ const Follow = (props) => {
                   type="button"
                   className="btn btn-danger"
                   value={f.follow_id}
+                  onClick={handleUnfollow}
                 >
                   Unfollow
                 </button>

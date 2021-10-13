@@ -147,7 +147,7 @@ const Signup = (props) => {
       //save it to the localstorage by using json stringify
       //localStorage.setItem("users", JSON.stringify(users));
 
-      const user = await createUser(userData);
+      await createUser(userData);
 
       //set the new users data
       //props.setUserData(users);
