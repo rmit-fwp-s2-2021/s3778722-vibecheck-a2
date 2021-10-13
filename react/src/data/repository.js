@@ -126,6 +126,20 @@ async function editCommentLikes(commentlike) {
   return response.data;
 }
 
+// Follows
+async function getFollows() {
+  const response = await axios.get(API_HOST + "/api/follows");
+
+  return response.data;
+}
+
+// Follows
+async function createFollows(user) {
+  const response = await axios.post(API_HOST + "/api/follows", user);
+
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -161,4 +175,6 @@ export {
   getCommentLikes,
   createCommentLikes,
   editCommentLikes,
+  getFollows,
+  createFollows,
 };

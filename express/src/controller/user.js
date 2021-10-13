@@ -3,7 +3,7 @@ const argon2 = require("argon2");
 
 // Select all users from the database.
 exports.all = async (req, res) => {
-  const users = await db.user.findAll();
+  const users = await db.user.findAll({ include: db.follow });
 
   res.json(users);
 };

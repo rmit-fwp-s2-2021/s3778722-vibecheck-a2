@@ -24,6 +24,7 @@ require("./src/routes/post.js")(express, app);
 require("./src/routes/comment.js")(express, app);
 require("./src/routes/postLike.js")(express, app);
 require("./src/routes/commentLike.js")(express, app);
+require("./src/routes/follow.js")(express, app);
 
 // Set port, listen for requests.
 const PORT = 4000;

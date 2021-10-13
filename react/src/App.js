@@ -14,6 +14,7 @@ import About from "./components/About";
 import Main from "./components/Main";
 import Profile from "./components/Profile";
 import Posts from "./components/Posts";
+import Follow from "./components/Follow";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import wallpaper from "./assets/Landing.jpg";
@@ -231,6 +232,7 @@ function App() {
               comments={comments}
               setComments={setComments}
             />
+            <Follow user={user} />
           </Route>
           <Route exact path="/posting">
             <Navbar email={email} logoutUser={logoutUser} />

@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const config = require("./config.js");
+const user = require("./models/user.js");
 
 const db = {
   Op: Sequelize.Op,
@@ -18,6 +19,7 @@ db.post = require("./models/post.js")(db.sequelize, DataTypes);
 db.comment = require("./models/comment.js")(db.sequelize, DataTypes);
 db.postLike = require("./models/postLike.js")(db.sequelize, DataTypes);
 db.commentLike = require("./models/commentLike.js")(db.sequelize, DataTypes);
+db.follow = require("./models/follow.js")(db.sequelize, DataTypes);
 
 // Relate post and user.
 db.user.hasMany(db.post, { onDelete: "cascade", hooks: true });
@@ -48,6 +50,11 @@ db.commentLike.belongsTo(db.comment, {
 db.commentLike.belongsTo(db.user, {
   onDelete: "cascade",
 });
+
+db.follow.belongsTo(db.user, { foreignKey: "userEmail" });
+
+db.follow.belongsTo(db.user, { foreignKey: "followEmail" });
+db.user.hasMany(db.follow);
 // Learn more about associations here: https://sequelize.org/master/manual/assocs.html
 
 // Include a sync option with seed data logic included.
