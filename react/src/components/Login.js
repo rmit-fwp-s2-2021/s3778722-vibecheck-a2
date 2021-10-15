@@ -50,6 +50,10 @@ const Login = (props) => {
       const message = "Invalid email address or password.";
       setAlertMessage(message);
       alert(message);
+    } else if (user.isBlocked === true) {
+      const message = "Account is blocked";
+      setAlertMessage(message);
+      alert(message);
     } else {
       //login is verified
       const message = "Login successful";

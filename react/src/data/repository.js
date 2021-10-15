@@ -18,7 +18,7 @@ async function verifyUser(email, password) {
   const user = response.data;
 
   // NOTE: In this example the login is also persistent as it is stored in local storage.
-  if (user !== null) {
+  if (user !== null && user.isBlocked === false) {
     setUser(user);
   }
   return user;

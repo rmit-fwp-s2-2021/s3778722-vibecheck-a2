@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.STRING(400),
         allowNull: true,
       },
+      isBlocked: {
+        type: DataTypes.BOOLEAN(),
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       // Don't add the timestamp attributes (updatedAt, createdAt).
