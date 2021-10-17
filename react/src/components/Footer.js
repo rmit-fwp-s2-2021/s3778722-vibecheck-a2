@@ -1,5 +1,6 @@
 import React from "react";
 
+//Footer component
 const Footer = () => {
   return (
     <footer className="cotainer py-3 bg-dark text-white p-md-4">

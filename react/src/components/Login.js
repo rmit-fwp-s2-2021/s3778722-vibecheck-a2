@@ -37,9 +37,6 @@ const Login = (props) => {
     setFields(inputFields);
   };
 
-  //for retrieving the users's local storage
-  //let users = JSON.parse(localStorage.getItem("users"));
-
   //event handler for form submit
   const handleSubmit = async (e) => {
     e.preventDefault();

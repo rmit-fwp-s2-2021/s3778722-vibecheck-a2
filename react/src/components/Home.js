@@ -1,6 +1,7 @@
 import React from "react";
 import defaultUser from "../assets/user.svg";
 
+//Home component
 const Home = (props) => {
   return (
     <div className="App">

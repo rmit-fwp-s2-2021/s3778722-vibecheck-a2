@@ -21,7 +21,8 @@ db.postLike = require("./models/postLike.js")(db.sequelize, DataTypes);
 db.commentLike = require("./models/commentLike.js")(db.sequelize, DataTypes);
 db.follow = require("./models/follow.js")(db.sequelize, DataTypes);
 
-// Relate post and user.
+// Provide the relationships between the tables
+// Cascade is specified to delete all its child components
 db.user.hasMany(db.post, { onDelete: "cascade", hooks: true });
 db.post.belongsTo(db.user);
 
@@ -52,10 +53,8 @@ db.commentLike.belongsTo(db.user, {
 });
 
 db.follow.belongsTo(db.user, { foreignKey: "userEmail" });
-
 db.follow.belongsTo(db.user, { foreignKey: "followEmail" });
 db.user.hasMany(db.follow);
-// Learn more about associations here: https://sequelize.org/master/manual/assocs.html
 
 // Include a sync option with seed data logic included.
 db.sync = async () => {
@@ -67,30 +66,4 @@ db.sync = async () => {
 
   //await seedData();
 };
-/*
-async function seedData() {
-  const count = await db.user.count();
-
-  // Only seed data if necessary.
-  if (count > 0) return;
-
-  const argon2 = require("argon2");
-
-  let hash = await argon2.hash("abc123", { type: argon2.argon2id });
-  await db.user.create({
-    username: "mbolger",
-    password_hash: hash,
-    first_name: "Matthew",
-    last_name: "Bolger",
-  });
-
-  hash = await argon2.hash("def456", { type: argon2.argon2id });
-  await db.user.create({
-    username: "shekhar",
-    password_hash: hash,
-    first_name: "Shekhar",
-    last_name: "Kalra",
-  });
-}
-*/
 module.exports = db;

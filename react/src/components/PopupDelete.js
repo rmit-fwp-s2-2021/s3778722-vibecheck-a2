@@ -7,12 +7,6 @@ import { useHistory } from "react-router-dom";
 
 const PopupDelete = (props) => {
   let history = useHistory();
-  /*   //to retrieve users from local storage by parsing json format
-  let users = JSON.parse(localStorage.getItem("users"));
-  //to retrieve comments from local storage by parsing json format
-  let comments = JSON.parse(localStorage.getItem("comments"));
-  //to retrieve posts from local storage by parsing json format
-  let posts = JSON.parse(localStorage.getItem("posts")); */
 
   //useState hook for showing the modal pop up
   const [show, setShow] = useState(false);
@@ -29,16 +23,11 @@ const PopupDelete = (props) => {
     await deleteUser(props.user);
     history.push("/login");
     props.logoutUser();
-    //history.push("/login");
-    //filter the data without the deleted user
-    /*     const removeUser = users.filter((user) => user.email !== props.email);
-    const removePosts = posts.filter((post) => post.email !== props.email);
-    const removeComments = comments.filter(
-      (comment) => comment.email !== props.email
-    ); */
+    //filter out the remaining posts
     const removePosts = props.posts.filter(
       (post) => post.userEmail !== props.user.email
     );
+    //filter out the remaining comments
     const removeComments = props.comments.filter(
       (comment) => comment.userEmail !== props.user.email
     );

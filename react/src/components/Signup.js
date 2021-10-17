@@ -74,9 +74,6 @@ const Signup = (props) => {
     setFields(inputFields);
   };
 
-  //get the users from local storage by parsing the json format
-  //let users = JSON.parse(localStorage.getItem("users"));
-
   //password regex validation
   //at least six characters and should be a mix of uppercase and lowercase characters, numbers and special characters.
   const passwordRegex = new RegExp(
@@ -90,12 +87,6 @@ const Signup = (props) => {
     //trim the fields to sanitize all input fields
     const trimmedFields = trimFields();
 
-    //if users is null, return empty array
-    /*
-    if (users === null) {
-      users = [];
-    }
-    */
     //check if the fields are empty
     if (
       !trimmedFields.name ||
@@ -144,13 +135,9 @@ const Signup = (props) => {
         date: date,
       };
 
-      //save it to the localstorage by using json stringify
-      //localStorage.setItem("users", JSON.stringify(users));
-
+      //save to database
       await createUser(userData);
 
-      //set the new users data
-      //props.setUserData(users);
       const messageSuccess =
         "Congratulations, your account has been successfully created.";
       setAlertMessage(messageSuccess);

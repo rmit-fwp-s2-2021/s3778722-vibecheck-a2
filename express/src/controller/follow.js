@@ -1,19 +1,16 @@
 const db = require("../database");
 
-// Select all posts from the database.
+// Select all follows from the database.
 exports.all = async (req, res) => {
-  //const posts = await db.post.findAll();
-
-  // Can use eager loading to join tables if needed, for example:
+  // Can use eager loading to join tables
   const follow = await db.follow.findAll({
     include: [db.user],
   });
 
-  // Learn more about eager loading here: https://sequelize.org/master/manual/eager-loading.html
   res.json(follow);
 };
 
-// Create a comment in the database.
+// Create a follow in the database.
 exports.create = async (req, res) => {
   const follow = await db.follow.create({
     userEmail: req.body.userEmail,
@@ -23,7 +20,9 @@ exports.create = async (req, res) => {
   res.json(follow);
 };
 
+// Delete a follow from the database
 exports.delete = async (req, res) => {
+  // parse is needed since the datatype is in integer.
   const followId = parseInt(req.params.follow_id);
 
   const follow = await db.follow.destroy({

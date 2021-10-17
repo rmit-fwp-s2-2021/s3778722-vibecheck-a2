@@ -4,8 +4,8 @@ import axios from "axios";
 const API_HOST = "http://localhost:4000";
 const USER_KEY = "user";
 
+/**Specify all the API Requests */
 // --- User ---------------------------------------------------------------------------------------
-
 async function getUsers() {
   const response = await axios.get(API_HOST + `/api/users/`);
   return response.data;
@@ -86,7 +86,7 @@ async function createComment(comment) {
   return response.data;
 }
 
-// Post Likes
+// --- Post Likes ---------------------------------------------------------------------------------------
 async function getPostLikes() {
   const response = await axios.get(API_HOST + "/api/postlikes");
 
@@ -103,7 +103,7 @@ async function editPostLikes(postlike) {
   return response.data;
 }
 
-// Comment Likes
+// --- Comment Likes ---------------------------------------------------------------------------------------
 async function getCommentLikes() {
   const response = await axios.get(API_HOST + "/api/commentlikes");
 
@@ -126,14 +126,13 @@ async function editCommentLikes(commentlike) {
   return response.data;
 }
 
-// Follows
+// --- Follows ---------------------------------------------------------------------------------------
 async function getFollows() {
   const response = await axios.get(API_HOST + "/api/follows");
 
   return response.data;
 }
 
-// Follows
 async function createFollows(user) {
   const response = await axios.post(API_HOST + "/api/follows", user);
 
@@ -161,6 +160,7 @@ function removeUser() {
   localStorage.removeItem(USER_KEY);
 }
 
+//exports all functions
 export {
   verifyUser,
   findUser,

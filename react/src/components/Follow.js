@@ -6,10 +6,15 @@ import {
   deleteFollow,
 } from "../data/repository";
 
+//Props is used to receive data from parent
 const Follow = (props) => {
+  //useState hooks for follows and users
   const [follows, setFollows] = useState([]);
   const [users, setUsers] = useState([]);
+
+  //useEffect hook will be executed when the follows length is changed.
   useEffect(() => {
+    //load the latest follows
     async function loadFollows() {
       const currentFollowings = await getFollows();
       setFollows(currentFollowings);
@@ -17,7 +22,9 @@ const Follow = (props) => {
     loadFollows();
   }, [follows.length]);
 
+  //useEffect hook will be executed when the follows length is changed.
   useEffect(() => {
+    //load the latest users
     async function loadUsers() {
       const fetchedUsers = await getUsers();
       setUsers(fetchedUsers);
@@ -25,20 +32,28 @@ const Follow = (props) => {
     loadUsers();
   }, [follows.length]);
 
+  //filter the matching emails from follows
+  //to obtain the current user followings
   const currentUserFollowings = () => {
     return follows.filter((f) => f.userEmail === props.user.email);
   };
-
+  //filter the users available to be followed
   const filterUnfollowedUsers = () => {
     const allEmail = users.map((u) => u.email);
     const followed = currentUserFollowings().map((f) => f.followEmail);
     const newList = [];
+
+    //loop through all the emails
     for (const x of allEmail) {
+      //check if it is already included in the current user followings
+      //excludes the current email if matches
       if (!followed.includes(x) && x !== props.user.email) {
         newList.push(x);
       }
     }
     const resList = [];
+    //loop through users to obtain all the data fields needed
+    //Include only the users that matches the previous "newList" obtained
     for (const i of users) {
       if (newList.includes(i.email)) {
         resList.push(i);
@@ -47,6 +62,7 @@ const Follow = (props) => {
     return resList;
   };
 
+  //handle the follow event
   const handleFollow = async (event) => {
     event.preventDefault();
     let newFollow = {
@@ -54,10 +70,10 @@ const Follow = (props) => {
       followEmail: event.target.value,
     };
     const tmpFollows = await createFollows(newFollow);
-
     setFollows([...follows, tmpFollows]);
   };
 
+  //handle the unfollow event
   const handleUnfollow = async (event) => {
     event.preventDefault();
     const deletedFollow = await deleteFollow(event.target.value);

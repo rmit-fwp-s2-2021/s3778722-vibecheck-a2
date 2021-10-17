@@ -45,8 +45,9 @@ const Posts = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorEditMessage, setErrorEditMessage] = useState(null);
   const [fileSelected, setFileSelected] = useState(null);
-
+  //destructure props
   const { setPosts, setComments } = props;
+  //useEffect Hook to load the latest post likes when postlikes length is changed
   useEffect(() => {
     async function loadPostLikes() {
       const currentPostLikes = await getPostLikes();
@@ -57,6 +58,7 @@ const Posts = (props) => {
     loadPostLikes();
   }, [setPosts, postLikes.length]);
 
+  //useEffect Hook to load the latest comment likes when commentlikes length is changed
   useEffect(() => {
     async function loadCommentLikes() {
       const currentCommentLikes = await getCommentLikes();
@@ -92,6 +94,7 @@ const Posts = (props) => {
     setEditId(event.target.value);
   };
 
+  //Handle create post like, like is set to true
   const handleCreatePostLike = async (event) => {
     event.preventDefault();
     let newPostLike = {
@@ -104,6 +107,7 @@ const Posts = (props) => {
     setPostLikes([...postLikes, tmpPostLike]);
   };
 
+  //Handle create post dislike, dislike is set to true
   const handleCreatePostDislike = async (event) => {
     event.preventDefault();
     let newPostLike = {
@@ -116,6 +120,7 @@ const Posts = (props) => {
     setPostLikes([...postLikes, tmpPostLike]);
   };
 
+  //Handle create comment like, like is set to true
   const handleCreateCommentLike = async (event) => {
     event.preventDefault();
 
@@ -126,10 +131,10 @@ const Posts = (props) => {
       commentCommentId: parseInt(event.target.value),
     };
     const tmpCommentLike = await createCommentLikes(newCommentLike);
-
     setCommentLikes([...commentLikes, tmpCommentLike]);
   };
 
+  //Handle create comment dislike, dislike is set to true
   const handleCreateCommentDislike = async (event) => {
     event.preventDefault();
     let newCommentLike = {
@@ -142,11 +147,10 @@ const Posts = (props) => {
     setCommentLikes([...commentLikes, tmpCommentLike]);
   };
 
+  //Edit post like
   const handlePostLike = async (event) => {
     event.preventDefault();
-    //const post = props.posts.find((post) => post.post_id === event.target.value)
     let tmpPostLike = {};
-    //loop through the post data and assign the new post input
     postLikes.forEach((x) => {
       if (x.postlike_id === parseInt(event.target.value)) {
         tmpPostLike["postlike_id"] = x.postlike_id;
@@ -160,12 +164,10 @@ const Posts = (props) => {
     setPostLikes([...postLikes, editedPostLike]);
   };
 
+  //Edit post dislike
   const handlePostDislike = async (event) => {
     event.preventDefault();
-    //const post = props.posts.find((post) => post.post_id === event.target.value)
     let tmpPostDislike = {};
-    //loop through the post data and assign the new post input
-
     postLikes.forEach((x) => {
       if (x.postlike_id === parseInt(event.target.value)) {
         tmpPostDislike["postlike_id"] = x.postlike_id;
@@ -175,16 +177,14 @@ const Posts = (props) => {
         tmpPostDislike["userEmail"] = x.userEmail;
       }
     });
-
     const editedPostLike = await editPostLikes(tmpPostDislike);
     setPostLikes([...postLikes, editedPostLike]);
   };
 
+  //Edit comment like
   const handleCommentLike = async (event) => {
     event.preventDefault();
-    //const post = props.posts.find((post) => post.post_id === event.target.value)
     let tmpCommentLike = {};
-    //loop through the post data and assign the new post input
     commentLikes.forEach((x) => {
       if (x.commentlike_id === parseInt(event.target.value)) {
         tmpCommentLike["commentlike_id"] = x.commentlike_id;
@@ -197,13 +197,10 @@ const Posts = (props) => {
     const editedCommentLike = await editCommentLikes(tmpCommentLike);
     setCommentLikes([...commentLikes, editedCommentLike]);
   };
-
+  //Edit comment dislike
   const handleCommentDislike = async (event) => {
     event.preventDefault();
-    //const post = props.posts.find((post) => post.post_id === event.target.value)
     let tmpCommentDislike = {};
-    //loop through the post data and assign the new post input
-
     commentLikes.forEach((x) => {
       if (x.commentlike_id === parseInt(event.target.value)) {
         tmpCommentDislike["commentlike_id"] = x.commentlike_id;
@@ -213,14 +210,15 @@ const Posts = (props) => {
         tmpCommentDislike["userEmail"] = x.userEmail;
       }
     });
-
     const editedCommentLike = await editCommentLikes(tmpCommentDislike);
     setCommentLikes([...commentLikes, editedCommentLike]);
   };
 
+  //handler for showing post likes and dislikes
   const showPostLikesDislikes = (userEmail, post) => {
     const found = () => {
       if (post.postLikes) {
+        //get the post like by finding the email that match the current user and current post
         return post.postLikes.find(
           (x) => x.userEmail === userEmail && x.postPostId === post.post_id
         );
@@ -293,9 +291,11 @@ const Posts = (props) => {
     }
   };
 
+  //handler for showing comment likes and dislikes
   const showCommentLikesDislikes = (userEmail, comment) => {
     const found = () => {
       if (comment.commentLikes) {
+        //get the comment like by finding the email that match the current user and current comment
         return comment.commentLikes.find(
           (x) =>
             x.userEmail === userEmail &&
@@ -394,13 +394,11 @@ const Posts = (props) => {
     };
     const resComment = await createComment(newComment);
 
-    //set the comment data and save it to local storage in json format
     props.setComments([...props.comments, resComment]);
     setComment("");
   };
 
   //event handler for editing a post
-
   const handleEdit = async (event) => {
     event.preventDefault();
     const postTrimmed = postEdit.trim();
@@ -424,9 +422,6 @@ const Posts = (props) => {
     });
     const editedPost = await editPost(tmpPost);
     props.setPosts([...props.posts, editedPost]);
-    //set the new post data in local storage in json format
-    //props.setPosts(tmpPost);
-    //localStorage.setItem("posts", JSON.stringify(tmpPost));
 
     //reset the states
     setPostEdit("");
@@ -442,26 +437,14 @@ const Posts = (props) => {
     const removedPost = props.posts.filter(
       (removingPost) => removingPost.post_id !== parseInt(event.target.value)
     );
-
-    //filter out the matched comments
-    /*
-    const removedComment = props.comments.filter(
-      (removingComment) => removingComment.postID !== event.target.value
-    );
-      */
-    //set and save the data on local storage in json format
-    //localStorage.setItem("posts", JSON.stringify(removedPost));
     props.setPosts(removedPost);
-    //localStorage.setItem("comments", JSON.stringify(removedComment));
-    //props.setComments(removedComment);
   };
 
   //event handler for form submit with async function
   //makes JavaScript wait until that promise settles and returns its result.
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //set a new unique id
-    //const uuid = uuidv4();
+
     // Trim the post text.
     const postTrimmed = post.trim();
 
@@ -473,9 +456,6 @@ const Posts = (props) => {
       setErrorMessage("A post cannot be more than 600 characters long.");
       return;
     }
-
-    //set new file name as the uuid
-    //const newFileName = uuid;
 
     let loc = null;
     const dateNow = Date.now().toString();
@@ -489,7 +469,6 @@ const Posts = (props) => {
 
     //assign post data
     let newPost = {
-      //postid as the uuid
       userEmail: props.user.email,
       text: postTrimmed,
       //australia timezone in a presentable format
@@ -504,29 +483,19 @@ const Posts = (props) => {
     const resPost = await createPost(newPost);
     //reset the input file field
     document.getElementById("fileUpload").value = "";
-    //set the new post and save it in local storage as json format
-    //props.setPosts(postsData);
+
     props.setPosts([...props.posts, resPost]);
     // Reset post content.
     setPost("");
     setErrorMessage("");
     setFileSelected(null);
   };
-  //get data from local storage by parsing the json
-
-  // let comments = JSON.parse(localStorage.getItem("comments")) || [];
-
-  //find the matching email address
-  /*
-  const found = (email) => {
-    return users.find((u) => u.email === email);
-  };*/
 
   //filter out the matching comments linked to the post
   const foundComments = (id) => {
     return props.comments.filter((c) => c.postPostId === id);
   };
-
+  //filter the post likes and count
   const countLikes = (post) => {
     if (post.postLikes) {
       const list = post.postLikes.filter((x) => x.like === true);
@@ -534,6 +503,7 @@ const Posts = (props) => {
     }
   };
 
+  // filter the post dislikes and count
   const countDislikes = (post) => {
     if (post.postLikes) {
       const list = post.postLikes.filter((x) => x.dislike === true);
@@ -541,6 +511,7 @@ const Posts = (props) => {
     }
   };
 
+  //filter the comment likes and count
   const countCommentLikes = (comment) => {
     if (comment.commentLikes) {
       const list = comment.commentLikes.filter((x) => x.like === true);
@@ -548,6 +519,7 @@ const Posts = (props) => {
     }
   };
 
+  //filter the comment dislikes and count
   const countCommentDislikes = (comment) => {
     if (comment.commentLikes) {
       const list = comment.commentLikes.filter((x) => x.dislike === true);

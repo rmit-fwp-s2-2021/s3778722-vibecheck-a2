@@ -45,8 +45,6 @@ const PopupForm = (props) => {
     setFields(inputFields);
   };
 
-  //get the users from the local storage by parsing the JSON format
-
   //password regex to validate the correct format:
   //at least six characters and should be a mix of uppercase and lowercase characters, numbers and special characters.
   const passwordRegex = new RegExp(
@@ -72,12 +70,6 @@ const PopupForm = (props) => {
     event.preventDefault();
 
     const trimmedFields = trimFields();
-
-    //if users is null, return empty array
-    /*
-    if (users === null) {
-      users = [];
-    }*/
 
     //if fields are empty, prompt to fill in.
     if (
@@ -114,63 +106,26 @@ const PopupForm = (props) => {
 
       props.setUser(profile);
 
-      //assign the new edited data
-      /*
-      for (const i of users.keys()) {
-        if (users[i].email === props.currentEmail) {
-          users[i].email = fields.email;
-          users[i].name = fields.name;
-          users[i].password = fields.password;
-        }
-      }*/
-      //set the new posts from the user changes
-
       let newPosts = [...props.posts];
 
+      //update the latest fields from posts in the new list
       props.posts.forEach((tmpPost, index) => {
         if (tmpPost.userEmail === props.user.email) {
           newPosts[index].user.name = trimmedFields.name;
         }
       });
-
+      //set the new list
       props.setPosts(newPosts);
 
+      //update the latest fields from comments in the new list
       let newComments = [...props.comments];
       props.comments.forEach((tmpComment, index) => {
         if (tmpComment.userEmail === props.user.email) {
           newComments[index].user.name = trimmedFields.name;
         }
       });
-
+      //set the new list
       props.setComments(newComments);
-      //set the new comments from the user changes
-      /*
-      let newComments = [...props.comments];
-      props.comments.forEach((tmpComment, index) => {
-        if (tmpComment.email === props.currentEmail) {
-          newComments[index].name = fields.name;
-        }
-      });
-      */
-      //set the new posts data on local storage
-      /*
-      localStorage.setItem("posts", JSON.stringify(newPosts));
-      props.setPosts(newPosts);*/
-
-      //set the new comments data on local storage
-      /*
-      localStorage.setItem("comments", JSON.stringify(newComments));
-      props.setComments(newComments);*/
-
-      //set the current email on local storageif new email is assigned
-      //localStorage.setItem("currentUser", fields.email);
-
-      //set the new user data on local storage
-      //localStorage.setItem("users", JSON.stringify(users));
-
-      //set new data for the state
-      //props.setCurrentEmail(fields.email);
-      //props.setUserData(users);
 
       //show alert message
       const messageSuccess = "Edit is saved.";

@@ -20,9 +20,6 @@ const config = {
 const ReactS3Client = new S3(config);
 
 const ImageUpload = (props) => {
-  //retrieve the local storage 'users'
-  //let users = JSON.parse(localStorage.getItem("users"));
-
   //useState hook for file selection
   const [fileSelected, setFileSelected] = useState(null);
 
@@ -36,12 +33,6 @@ const ImageUpload = (props) => {
 
   //event handler for file upload
   const handleUpload = async (file) => {
-    //if users is null set to empty array
-    /*
-    if (users === null) {
-      users = [];
-    }
-    */
     setAlertMessage("Uploading...");
 
     //execute s3 file upload with new filename set as current user email
@@ -64,12 +55,6 @@ const ImageUpload = (props) => {
 
     const newUser = await editUser(user);
     props.setUser(newUser);
-
-    //set the newly assigned users to local storage
-    //localStorage.setItem("users", JSON.stringify(users));
-
-    //set the users data
-    //props.setUserData(users);
   };
 
   //function to show alert message with the message parameter

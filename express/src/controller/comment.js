@@ -1,19 +1,18 @@
 const db = require("../database");
 
-// Select all posts from the database.
+// Select all comments from the database.
 exports.all = async (req, res) => {
   //const posts = await db.post.findAll();
 
-  // Can use eager loading to join tables if needed, for example:
+  // Eager loading was used to join the tables of the user, post and commentlike.
   const comments = await db.comment.findAll({
     include: [db.user, db.post, db.commentLike],
   });
 
-  // Learn more about eager loading here: https://sequelize.org/master/manual/eager-loading.html
   res.json(comments);
 };
 
-// Create a post in the database.
+// Create a comment in the database.
 exports.create = async (req, res) => {
   const comment = await db.comment.create({
     text: req.body.text,
@@ -25,7 +24,7 @@ exports.create = async (req, res) => {
   res.json(comment);
 };
 
-// Update a profile in the database.
+// Update a comment with the fields provided in the database.
 exports.update = async (req, res) => {
   const comment = await db.comment.findByPk(req.body.comment_id);
 
@@ -40,7 +39,9 @@ exports.update = async (req, res) => {
   res.json(comment);
 };
 
+// Delete a comment from the database
 exports.delete = async (req, res) => {
+  // parse is needed since the datatype is in integer.
   const parseCommentId = parseInt(req.params.comment_id);
 
   const comment = await db.comment.destroy({

@@ -50,6 +50,7 @@ exports.update = async (req, res) => {
     const hash = await argon2.hash(req.body.password, {
       type: argon2.argon2id,
     });
+    //Assigned it to hash when only the requested password are different
     if (req.body.password !== user.password_hash) {
       user.password_hash = hash;
     }
@@ -69,6 +70,7 @@ exports.update = async (req, res) => {
   res.json(user);
 };
 
+//Delete user from database
 exports.delete = async (req, res) => {
   const user = await db.user.destroy({
     where: { email: req.body.email },

@@ -2,13 +2,13 @@ module.exports = (express, app) => {
   const controller = require("../controller/follow.js");
   const router = express.Router();
 
-  // Select all posts.
+  // Select all follows
   router.get("/", controller.all);
 
-  // Create a new post.
+  // Create a new follow
   router.post("/", controller.create);
 
-  // Delete a post.
+  // Delete a follow
   router.delete("/delete/:follow_id", controller.delete);
 
   // Add routes to server.

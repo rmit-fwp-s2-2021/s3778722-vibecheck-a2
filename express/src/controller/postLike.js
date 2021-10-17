@@ -1,17 +1,15 @@
 const db = require("../database");
 
-// Select all posts from the database.
+// Select all postlikes from the database.
 exports.all = async (req, res) => {
-  //const posts = await db.post.findAll();
-
-  // Can use eager loading to join tables if needed, for example:
+  // Used eager loading to join tables
   const postLike = await db.postLike.findAll({ include: [db.user, db.post] });
 
   // Learn more about eager loading here: https://sequelize.org/master/manual/eager-loading.html
   res.json(postLike);
 };
 
-// Create a post in the database.
+// Create a postlike in the database.
 exports.create = async (req, res) => {
   const postLike = await db.postLike.create({
     like: req.body.like,
@@ -23,7 +21,7 @@ exports.create = async (req, res) => {
   res.json(postLike);
 };
 
-// Update a profile in the database.
+// Update a postlike in the database.
 exports.update = async (req, res) => {
   const postLike = await db.postLike.findByPk(req.body.postlike_id);
   postLike.like = req.body.like;
@@ -34,6 +32,7 @@ exports.update = async (req, res) => {
   res.json(postLike);
 };
 
+// Delete a postlike in the database
 exports.delete = async (req, res) => {
   const parsePostLikeId = parseInt(req.params.postlike_id);
 

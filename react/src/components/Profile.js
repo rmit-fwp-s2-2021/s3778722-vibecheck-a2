@@ -4,21 +4,8 @@ import PopupDelete from "./PopupDelete";
 import ImageUpload from "./ImageUpload";
 import defaultUser from "../assets/user.svg";
 
+//Profile component
 const Profile = (props) => {
-  // Load profile.
-  /*
-  useEffect(() => {
-    async function loadProfile() {
-      const currentProfile = await findUser(props.user.email);
-
-      props.setUser(currentProfile);
-      setUser(currentProfile);
-      //setFieldsNullToEmpty(currentProfile);
-    }
-    loadProfile();
-    console.log(loadProfile());
-  }, []);
-  */
   return (
     <>
       <h1 className="display-6 mt-4">Profile</h1>

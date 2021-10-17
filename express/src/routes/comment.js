@@ -2,16 +2,16 @@ module.exports = (express, app) => {
   const controller = require("../controller/comment.js");
   const router = express.Router();
 
-  // Select all posts.
+  // Select all comments.
   router.get("/", controller.all);
 
-  // Create a new post.
+  // Create a new comment.
   router.post("/", controller.create);
 
-  // Update a post.
+  // Update a comment.
   router.put("/edit", controller.update);
 
-  // Delete a post.
+  // Delete a comment.
   router.delete("/delete/:comment_id", controller.delete);
 
   // Add routes to server.

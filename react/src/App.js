@@ -33,96 +33,49 @@ const Wrapper = styled.section`
 `;
 
 function App() {
-  //useState hook for userData that retrieve from local storage of 'users' key.
-
-  //useState hook for currentUser, which uses email as unique identifier that retrieve from local storage of 'currentUser' key.
+  //Just to store the current user session
+  //useState hook for currentUser, which uses email as unique identifier.
   const [email, setEmail] = useState(localStorage.getItem("currentUser"));
 
+  //When a user logins.. it sets the data to the localstorage
+  //After verifying from API
   const [user, setUser] = useState(getUser());
-  //const [users, setUsers] = useState([]);
 
   const [posts, setPosts] = useState([]);
-  //const [isLoading, setIsLoading] = useState(true);
-
   const [comments, setComments] = useState([]);
 
+  //useEffect hook to load the current user
   useEffect(() => {
     async function loadProfile() {
       const currentProfile = await findUser(email);
       setUser(currentProfile);
-      //setFieldsNullToEmpty(currentProfile);
     }
     loadProfile();
   }, [email]);
 
+  //useEffect hook to load the current posts when the post length changes
   useEffect(() => {
     async function loadPosts() {
       const currentPosts = await getPosts();
       setPosts(currentPosts);
-      //setIsLoading(false);
     }
     loadPosts();
   }, [posts.length]);
 
+  //useEffect hook to load the current comments when the comment length changes
   useEffect(() => {
     async function loadComments() {
       const currentComments = await getComments();
       setComments(currentComments);
-      //setIsLoading(false);
     }
     loadComments();
   }, [comments.length]);
 
-  /*
-  useEffect(() => {
-    async function loadUsers() {
-      const currentUsers = await getUsers();
-
-      setUsers(currentUsers);
-    }
-    loadUsers();
-    console.log("run user effect");
-  }, []);
-  */
-  //useState hook for posts that retrieve from local storage of 'posts' key.
-  /*
-  const [posts, setPosts] = useState(
-    JSON.parse(localStorage.getItem("posts")) || []
-  );*/
-
-  //useState hook for comments that retrieve from local storage of 'comments' key.
-  /*
-  const [comments, setComments] = useState(
-    JSON.parse(localStorage.getItem("comments")) || []
-  );
-    */
-  //useEffect hook for listening to localStorage of current user with side effects
+  //useEffect hook to make local storage sync with user changes
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
-
-  //useEffect hook for listening to localStorage of users with side effects
-  /*
-  useEffect(() => {
-    window.addEventListener("storage", () => {
-      setUser(JSON.parse(localStorage.getItem("user")));
-    });
-  }, []);*/
-
-  //function to filter and find the current user data
-  /*
-  const currentUser = () => {
-    if (userData !== null) {
-      //Necessary to use the original for-loop to loop through it because for-of loop won't work here.
-      for (let i = 0; i < userData.length; i++) {
-        if (userData[i].email === email) {
-          setUserData(userData[i]);
-        }
-      }
-    }
-  };*/
-  //currentUser();
 
   //check if user is logged in
   const loggedIn = () => {
@@ -132,17 +85,13 @@ function App() {
     return false;
   };
 
-  //to set the email with the emailEntered field
-  /*const loginUser = (emailEntered) => {
-    setEmail(emailEntered);
-  };*/
-
+  //login user function
   const loginUser = (user) => {
     setUser(user);
   };
 
   //Remove a user from localStorage and set the email to null,
-  // while setting the user data to all users, instead of the current user data.
+  //Set fields to null
   const logoutUser = () => {
     removeUser();
     localStorage.removeItem("currentUser");
